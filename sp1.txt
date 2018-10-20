@@ -1,0 +1,102 @@
+close all
+clear all
+clc
+
+%% 1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn 
+
+dirData = dir('SUB*.xlsx');
+
+% Bara finna open / closed
+% dirData = dir('SUB*open*.xlsx');
+% dirData.name
+
+for i = 1 : length(dirData)
+    % Sæki nafn á skrá
+    fileName = (dirData(i).name);
+    
+    % Sæki nafn fyrir hvert variable
+    variableName = strsplit((dirData(i).name),'.');
+    variableName = variableName{1};
+    
+    % Set hverja skrá í variable merkt sér.
+    eval(['data_' variableName '=xlsread(fileName);']);
+    
+end
+
+%% 2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma?
+
+% 50Hz = 20ms (millisecond)
+
+%% 3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window
+
+    
+
+%% 4. Teiknið upp gröfin fyrir einstaklingana eins og sést er á mynd 2 og látið Matlab vista myndirnar sjálfkrafa í undirmöppunni "myndir"
+
+% Fyrst að athuga hvort mappan "Myndir" sé til, 
+% ef ekki, þá búa hana til
+if exist('Myndir', 'dir') == 7
+
+else
+    mkdir Myndir
+end
+
+Stimuli = xlsread('Stimuli.xlsx');
+xStimuli = Stimuli(:,1);
+yStimuli = Stimuli(:, 2);
+yStimuli = changeStimuliFormat(yStimuli);
+
+figure
+subplot(3,1,1)
+hold on
+title('Stimuli')
+xlabel('Time[s]')
+ylabel('1/0')
+plot(xStimuli(1:1501),yStimuli(1:1501),'m')
+plot(xStimuli(1501:5250),yStimuli(1501:5250),'r')
+plot(xStimuli(5251:9000),yStimuli(5251:9000),'g')
+plot(xStimuli(9001:12750),yStimuli(9001:12750),'b')
+plot(xStimuli(12751:16500),yStimuli(12751:16500),'k')
+axis([0 350 -1 2])
+set(gca, 'yticklabel', []);
+hold off
+
+xdata_SUB1_open = data_SUB1_open(:,1);
+ydata_SUB1_open = data_SUB1_open(:, 2);
+
+subplot(3,1,2)
+hold on
+title('opin augu: Medial/Lateral vægi')
+xlabel('Time[s]')
+ylabel('Torque [Nm]')
+plot(xdata_SUB1_open(1:1501),ydata_SUB1_open(1:1501),'m')
+plot(xdata_SUB1_open(1501:5250),ydata_SUB1_open(1501:5250),'r')
+plot(xdata_SUB1_open(5251:9000),ydata_SUB1_open(5251:9000),'g')
+plot(xdata_SUB1_open(9001:12750),ydata_SUB1_open(9001:12750),'b')
+plot(xdata_SUB1_open(12751:16500),ydata_SUB1_open(12751:16500),'k')
+axis([0 350 -40 40])
+set(gca, 'yticklabel', []);
+hold off
+
+
+
+
+
+%% 5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt er á mynd 3 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
