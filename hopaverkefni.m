@@ -54,7 +54,6 @@ end
 Stimuli = xlsread('Stimuli.xlsx');
 xStimuli = Stimuli(:,1);
 yStimuli = Stimuli(:, 2);
-yStimuli = changeStimuliFormat(yStimuli);
 
 % Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
 % Ef gildið er 20, er því breytt í 0 og það þýðir að örvun sé af.
@@ -76,7 +75,7 @@ for i = 1 : length(VariableList)
      
     % Býr til nýja mynd, sem birtist ekki á skjánum
     % því við ætlum bara að vista hana.
-    newFigure = figure('visible','off');
+    newFigure = figure;
     
     % --- plot 1 ---
     
@@ -148,10 +147,6 @@ for i = 1 : length(VariableList)
 end
 
 %% 5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt er á mynd 3 
-
-
-
-
 
 
 
