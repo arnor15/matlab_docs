@@ -2,62 +2,59 @@ close all
 clear all
 clc
 
-%% 1. LÃ¡tiÃ° Matlab finna sjÃ¡lfvirkt allar gagnarkskrÃ¡rnar og lesa Ã¾Ã¦r sjÃ¡lfvirkt inn 
+%% 1. Látiğ Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa şær sjálfvirkt inn 
 
 dirData = dir('SUB*.xlsx');
 
-% Bara finna open / closed
-% dirData = dir('SUB*open*.xlsx');
-% dirData.name
-
 for i = 1 : length(dirData)
-    % SÃ¦ki nafn Ã¡ skrÃ¡
+    % Sæki nafn á skrá
     fileName = (dirData(i).name);
     
-    % SÃ¦ki nafn fyrir hvert variable
+    % Sæki nafn fyrir hvert variable
     variableName = strsplit((dirData(i).name),'.');
     variableName = variableName{1};
-    variableName = convertCharsToStrings(variableName)
+    variableName = convertCharsToStrings(variableName);
     
-    % Athuga hvort skrÃ¡ sÃ© meÃ° opin eÃ°a lokuÃ° augu
+    % Athuga hvort skrá sé meğ opin eğa lokuğ augu
     if isempty(strfind(variableName,'open')) == 0
         VariableList{i}.type = 'open';
     else
         VariableList{i}.type = 'closed';
     end
-    VariableList{i}.type = convertCharsToStrings(VariableList{i}.type)
+    VariableList{i}.type = convertCharsToStrings(VariableList{i}.type);
     
-    % Set hverja skrÃ¡ Ã­ variable merkt sÃ©r.
+    % Set hverja skrá í variable merkt sér.
     VariableList{i}.name = variableName;
     VariableList{i}.data = xlsread(fileName);
 end
 
-%% 2. MiÃ°aÃ° viÃ° sÃ¶fnunartÃ­Ã°ni upp Ã¡ 50Hz, hvaÃ° tekur ein mÃ¦ling langan tÃ­ma?
+%% 2. Miğağ viğ söfnunartíğni upp á 50Hz, hvağ tekur ein mæling langan tíma?
 
 % 50Hz = 20ms (millisecond)
 
-%% 3. SkrifiÃ° fall sem telur fjÃ¶lda stimulusa og reiknar Ãºt meÃ°altÃ­malengd Ã¾eirra. SkrifiÃ° Ãºt niÃ°urstÃ¶Ã°urnar Ã­ command window
+%% 3. Skrifiğ fall sem telur fjölda stimulusa og reiknar út meğaltímalengd şeirra. Skrifiğ út niğurstöğurnar í command window
 
-    
+stimuli = xlsread('Stimuli.xlsx');  % Sæki allar stimuli mælingar
+calculateStimuli(stimuli) 
 
-%% 4. TeikniÃ° upp grÃ¶fin fyrir einstaklingana eins og sÃ©st er Ã¡ mynd 2 og lÃ¡tiÃ° Matlab vista myndirnar sjÃ¡lfkrafa Ã­ undirmÃ¶ppunni "myndir"
+%% 4. Teikniğ upp gröfin fyrir einstaklingana eins og sést er á mynd 2 og látiğ Matlab vista myndirnar sjálfkrafa í undirmöppunni "myndir"
 
-% Fyrst aÃ° athuga hvort mappan "Myndir" sÃ© til, 
-% ef ekki, Ã¾Ã¡ bÃºa hana til
+% Fyrst ağ athuga hvort mappan "Myndir" sé til, 
+% ef ekki, şá búa hana til
 if exist('Myndir', 'dir') == 7
 
 else
     mkdir Myndir
 end
 
-% SÃ¦ki stimuli skrÃ¡nna sem verÃ°ur notuÃ° Ã­ Ã¶llum plotum
-Stimuli = xlsread('Stimuli.xlsx');
-xStimuli = Stimuli(:,1);
-yStimuli = Stimuli(:, 2);
+% Sæki stimuli skránna sem verğur notuğ í öllum plotum
+stimuli = xlsread('Stimuli.xlsx');
+xStimuli = stimuli(:,1);
+yStimuli = stimuli(:, 2);
 
-% Ãegar gildin Ã­ inntaksbreytu eru 59, er Ã¾eim breytt Ã­ 1 og Ã¾aÃ° Ã¾Ã½Ã°ir aÃ° Ã¶rvun sÃ© Ã¡.
-% Ef gildiÃ° er 20, er Ã¾vÃ­ breytt Ã­ 0 og Ã¾aÃ° Ã¾Ã½Ã°ir aÃ° Ã¶rvun sÃ© af.
-% Annars skilar falliÃ° villu Ã­ Ã¾vÃ­ staki sem villan fundin.
+% Şegar gildin í inntaksbreytu eru 59, er şeim breytt í 1 og şağ şığir ağ örvun sé á.
+% Ef gildiğ er 20, er şví breytt í 0 og şağ şığir ağ örvun sé af.
+% Annars skilar falliğ villu í şví staki sem villan fundin.
 for i = 1 : length(yStimuli)
     if yStimuli(i)==20
     yStimuli(i)=0;
@@ -67,14 +64,14 @@ for i = 1 : length(yStimuli)
 end
 
 % Skilgreinir plot titla
-TitleOpen = ["Opin augu: Medial/Lateral vÃ¦gi", "Opin augu: Anterior/Posterior vÃ¦gi"]
-TitleClosed = ["LokuÃ° augu: Medial/Lateral vÃ¦gi", "LokuÃ° augu: Anterior/Posterior vÃ¦gi"]
+TitleOpen = ["Opin augu: Medial/Lateral vægi", "Opin augu: Anterior/Posterior vægi"]
+TitleClosed = ["Lokuğ augu: Medial/Lateral vægi", "Lokuğ augu: Anterior/Posterior vægi"]
 
-% Plottar upp eina mynd meÃ° 3 subplottum og vistar fyrir hvert gagnasett
+% Plottar upp eina mynd meğ 3 subplottum og vistar fyrir hvert gagnasett
 for i = 1 : length(VariableList)
      
-    % BÃ½r til nÃ½ja mynd, sem birtist ekki Ã¡ skjÃ¡num
-    % Ã¾vÃ­ viÃ° Ã¦tlum bara aÃ° vista hana.
+    % Bır til nıja mynd, sem birtist ekki á skjánum
+    % şví viğ ætlum bara ağ vista hana.
     newFigure = figure;
     
     % --- plot 1 ---
@@ -92,8 +89,8 @@ for i = 1 : length(VariableList)
     set(gca, 'yticklabel', []);
     hold off;
     
-    % Athugar hvort eigi aÃ° notaÃ° titil fyrir
-    % opin eÃ°a lokuÃ° augu
+    % Athugar hvort eigi ağ notağ titil fyrir
+    % opin eğa lokuğ augu
     if VariableList{i}.type == 'open'
         Title = TitleOpen;
     else
@@ -137,7 +134,7 @@ for i = 1 : length(VariableList)
     set(gca, 'yticklabel', []);
     hold off;
     
-    % BÃ½ til filepath til aÃ° vista figure
+    % Bı til filepath til ağ vista figure
     basefile = convertCharsToStrings(pwd);
     filename = '/Myndir/' + VariableList{i}.name + '.fig';
     filePath = pwd + filename;
@@ -146,7 +143,11 @@ for i = 1 : length(VariableList)
     saveas(newFigure, filePath);
 end
 
-%% 5.TeikniÃ° upp muninn Ã¡ sveigjunni Ã­ plÃ¶nunum tveimur eins og sÃ½nt er Ã¡ mynd 3 
+%% 5.Teikniğ upp muninn á sveigjunni í plönunum tveimur eins og sınt er á mynd 3 
+
+
+
+
 
 
 
