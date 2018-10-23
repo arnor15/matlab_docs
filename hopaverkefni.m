@@ -4,6 +4,10 @@ clc
 
 %% 1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn 
 
+% Sæki stimuli skránna sem verður notuð í öllum plotum
+stimuli = xlsread('Stimuli.xlsx');
+
+% Sæki nöfnin á öllum SUB skrám
 dirData = dir('SUB*.xlsx');
 
 % Bara finna open / closed
@@ -52,8 +56,7 @@ else
     mkdir Myndir
 end
 
-% Sæki stimuli skránna sem verður notuð í öllum plotum
-stimuli = xlsread('Stimuli.xlsx');
+
 xStimuli = stimuli(:,1);
 yStimuli = stimuli(:, 2);
 
@@ -151,11 +154,10 @@ end
 %% 5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt er á mynd 3 
 
 % Skilgreinir plot titla
-TitleOpen = ["Opin augu"]
-TitleClosed = ["Lokuð augu"]
+TitleOpen = ["Opin augu"];
+TitleClosed = ["Lokuð augu"];
 
 for i = 1 : length(VariableList)
-    
     Lateral_xAs = VariableList{i}.data(:,2);
     Anteroposterior_yAs = VariableList{i}.data(:, 3);
 
@@ -168,14 +170,11 @@ for i = 1 : length(VariableList)
     end
     
     newFigure = figure;
-    
-    % --- plot 1 ---
-    
     hold on
     title(Title);
     xlabel('Anterior/posterior [Nm]');
     ylabel('Medial/Lateral [Nm]');
-    plot(Lateral_xAs,Anteroposterior_yAs,"Marker", '.', 'Color', 'b', 'LineStyle','none');
+    plot(Lateral_xAs(1501:5250,Anteroposterior_yAs(1501:5250),"Marker", '.', 'Color', 'b')
     axis([-20 20 -40 40]);
     hold off;
 
@@ -184,18 +183,83 @@ end
 
 %% 6. Hvernig breytist staðan milli Q1, Q2, Q3 og Q4. Tekst fólki að læra inn á það hvernig bregaðst skuli við örvunum?
 
+for i = 1 : length(VariableList)
+
+    Lateral_xAs = VariableList{i}.data(:,2);
+    Anteroposterior_yAs = VariableList{i}.data(:, 3);
+    
+    medaltalLateralQ1(i) = mean(Lateral_xAs(1501:5250));
+    medaltalLateralQ2(i) = mean(Lateral_xAs(5251:9000));
+    medaltalLateralQ3(i) = mean(Lateral_xAs(9001:12750));
+    medaltalLateralQ4(i) = mean(Lateral_xAs(12751:16500));
+    medaltalAnteroposteriorQ1(i) = mean(Anteroposterior_yAs(1501:5250));
+    medaltalAnteroposteriorQ2(i) = mean(Anteroposterior_yAs(5251:9000));
+    medaltalAnteroposteriorQ3(i) = mean(Anteroposterior_yAs(9001:12750));
+    medaltalAnteroposteriorQ4(i) = mean(Anteroposterior_yAs(12751:16500));
+
+    stdLateralQ1(i) = std(Lateral_xAs(1501:5250));
+    stdLateralQ2(i) = std(Lateral_xAs(5251:9000));
+    stdLateralQ3(i) = std(Lateral_xAs(9001:12750));
+    stdLateralQ4(i) = std(Lateral_xAs(12751:16500));
+    
+    stdAnteroposteriorQ1(i) = std(Anteroposterior_yAs(1501:5250));
+    stdAnteroposteriorQ2(i) = std(Anteroposterior_yAs(5251:9000));
+    stdAnteroposteriorQ3(i) = std(Anteroposterior_yAs(9001:12750));
+    stdAnteroposteriorQ4(i) = std(Anteroposterior_yAs(12751:16500));
+    
+end
+
+meanTotalLateral = mean(medaltalLateralQ1);
+meanTotalAnterior = mean(medaltalAnteroposteriorQ1);
+stdMeanTotalLateral = mean(stdLateralQ1);
+stdMeanTotalAnterior =  mean(stdAnteroposteriorQ4);
+
+
+errorbar(medaltalLateralQ1,stdLateralQ1,'x')
+
+figure
+for i = 1 : length(VariableList)
+   hold on
+   scatter(y1, medaltalAnteroposteriorQ1);
+   scatter(y2, medaltalAnteroposteriorQ2);
+   scatter(y3, medaltalAnteroposteriorQ3);
+   scatter(y4, medaltalAnteroposteriorQ4);
+end
+hold off
+
+figure
+for i = 1 : length(VariableList)
+   hold on
+   scatter(y1, medaltalLateralQ1);
+   scatter(y2, medaltalLateralQ2);
+   scatter(y3, medaltalLateralQ3);
+   scatter(y4, medaltalLateralQ4);
+end
+hold off
+
+
+
+y1 = (1:66);
+for i = 1 : length(y1)
+    y1(i) = 1;
+end
+y2 = (1:66);
+for i = 1 : length(y2)
+    y2(i) = 2;
+end
+y3 = (1:66);
+for i = 1 : length(y3)
+    y3(i) = 3;
+end
+y4 = (1:66);
+for i = 1 : length(y4)
+    y4(i) = 4;
+end
+    
+
+    
+
+
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. 
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
-
-
-
-
-
-
-
-
-
-
-
-
