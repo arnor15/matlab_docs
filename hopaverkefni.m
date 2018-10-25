@@ -2,12 +2,12 @@ close all
 clear all
 clc
 
-%% 1. Látiğ Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa şær sjálfvirkt inn 
+%% 1. LÃ¡tiÃ° Matlab finna sjÃ¡lfvirkt allar gagnarkskrÃ¡rnar og lesa Ã¾Ã¦r sjÃ¡lfvirkt inn 
 
-% Sæki stimuli skránna sem verğur notuğ í öllum plotum
+% SÃ¦ki stimuli skrÃ¡nna sem verÃ°ur notuÃ° Ã­ Ã¶llum plotum
 stimuli = xlsread('Stimuli.xlsx');
 
-% Sæki nöfnin á öllum SUB skrám
+% SÃ¦ki nÃ¶fnin Ã¡ Ã¶llum SUB skrÃ¡m
 dirData = dir('SUB*.xlsx');
 
 % Bara finna open / closed
@@ -15,15 +15,17 @@ dirData = dir('SUB*.xlsx');
 % dirData.name
 
 for i = 1 : length(dirData)
-    % Sæki nafn á skrá
+    % SÃ¦ki nafn Ã¡ skrÃ¡
     fileName = (dirData(i).name);
     
-    % Sæki nafn fyrir hvert variable
+    % SÃ¦ki nafn fyrir hvert variable
     variableName = strsplit((dirData(i).name),'.');
     variableName = variableName{1};
     variableName = convertCharsToStrings(variableName);
     
-    % Athuga hvort skrá sé meğ opin eğa lokuğ augu
+    fprintf('Saeki gogn ur %s', variableName)
+    
+    % Athuga hvort skrÃ¡ sÃ© meÃ° opin eÃ°a lokuÃ° augu
     if isempty(strfind(variableName,'open')) == 0
         VariableList{i}.type = 'open';
     else
@@ -31,36 +33,37 @@ for i = 1 : length(dirData)
     end
     VariableList{i}.type = convertCharsToStrings(VariableList{i}.type);
     
-    % Set hverja skrá í variable merkt sér.
+    % Set hverja skrÃ¡ Ã­ variable merkt sÃ©r.
     VariableList{i}.name = variableName;
     VariableList{i}.data = xlsread(fileName);
 end
 
-%% 2. Miğağ viğ söfnunartíğni upp á 50Hz, hvağ tekur ein mæling langan tíma?
+%% 2. MiÃ°aÃ° viÃ° sÃ¶fnunartÃ­Ã°ni upp Ã¡ 50Hz, hvaÃ° tekur ein mÃ¦ling langan tÃ­ma?
 
 % ?
 
-%% 3. Skrifiğ fall sem telur fjölda stimulusa og reiknar út meğaltímalengd şeirra. Skrifiğ út niğurstöğurnar í command window
+%% 3. SkrifiÃ° fall sem telur fjÃ¶lda stimulusa og reiknar Ãºt meÃ°altÃ­malengd Ã¾eirra. SkrifiÃ° Ãºt niÃ°urstÃ¶Ã°urnar Ã­ command window
 
 calculateStimuli(stimuli)           
 
 
-%% 4. Teikniğ upp gröfin fyrir einstaklingana eins og sést er á mynd 2 og látiğ Matlab vista myndirnar sjálfkrafa í undirmöppunni "myndir"
+%% 4. TeikniÃ° upp grÃ¶fin fyrir einstaklingana eins og sÃ©st er Ã¡ mynd 2 og lÃ¡tiÃ° Matlab vista myndirnar sjÃ¡lfkrafa Ã­ undirmÃ¶ppunni "myndir"
 
-% Fyrst ağ athuga hvort mappan "Myndir" sé til, 
-% ef ekki, şá búa hana til
+% Fyrst aÃ° athuga hvort mappan "Myndir" sÃ© til, 
+% ef ekki, Ã¾Ã¡ bÃºa hana til
 if exist('Myndir', 'dir') == 7
-
+    fprintf('Mappan myndir er til')
 else
+    fprintf('Mappan myndir er ekki til, by hana til...')
     mkdir Myndir
 end
 
 xStimuli = stimuli(:,1);
 yStimuli = stimuli(:, 2);
 
-% Şegar gildin í inntaksbreytu eru 59, er şeim breytt í 1 og şağ şığir ağ örvun sé á.
-% Ef gildiğ er 20, er şví breytt í 0 og şağ şığir ağ örvun sé af.
-% Annars skilar falliğ villu í şví staki sem villan fundin.
+% Ãegar gildin Ã­ inntaksbreytu eru 59, er Ã¾eim breytt Ã­ 1 og Ã¾aÃ° Ã¾Ã½Ã°ir aÃ° Ã¶rvun sÃ© Ã¡.
+% Ef gildiÃ° er 20, er Ã¾vÃ­ breytt Ã­ 0 og Ã¾aÃ° Ã¾Ã½Ã°ir aÃ° Ã¶rvun sÃ© af.
+% Annars skilar falliÃ° villu Ã­ Ã¾vÃ­ staki sem villan fundin.
 for i = 1 : length(yStimuli)
     if yStimuli(i)==20
     yStimuli(i)=0;
@@ -70,14 +73,15 @@ for i = 1 : length(yStimuli)
 end
 
 % Skilgreinir plot titla
-TitleOpen = ["Opin augu: Medial/Lateral vægi", "Opin augu: Anterior/Posterior vægi"];
-TitleClosed = ["Lokuğ augu: Medial/Lateral vægi", "Lokuğ augu: Anterior/Posterior vægi"];
+TitleOpen = ["Opin augu: Medial/Lateral vÃ¦gi", "Opin augu: Anterior/Posterior vÃ¦gi"];
+TitleClosed = ["LokuÃ° augu: Medial/Lateral vÃ¦gi", "LokuÃ° augu: Anterior/Posterior vÃ¦gi"];
 
-% Plottar upp eina mynd meğ 3 subplottum og vistar fyrir hvert gagnasett
+% Plottar upp eina mynd meÃ° 3 subplottum og vistar fyrir hvert gagnasett
 for i = 1 : length(VariableList)
-     
-    % Bır til nıja mynd, sem birtist ekki á skjánum
-    % şví viğ ætlum bara ağ vista hana.
+    
+    fprintf('Vista mynd nr %d ...', i)   
+    % BÃ½r til nÃ½ja mynd, sem birtist ekki Ã¡ skjÃ¡num
+    % Ã¾vÃ­ viÃ° Ã¦tlum bara aÃ° vista hana.
     newFigure = figure('visible', 'off');
     
     % --- plot 1 ---
@@ -95,8 +99,8 @@ for i = 1 : length(VariableList)
     set(gca, 'yticklabel', []);
     hold off;
     
-    % Athugar hvort eigi ağ notağ titil fyrir
-    % opin eğa lokuğ augu
+    % Athugar hvort eigi aÃ° notaÃ° titil fyrir
+    % opin eÃ°a lokuÃ° augu
     if VariableList{i}.type == 'open'
         Title = TitleOpen;
     else
@@ -140,7 +144,7 @@ for i = 1 : length(VariableList)
     set(gca, 'yticklabel', []);
     hold off;
     
-    % Bı til filepath til ağ vista figure
+    % BÃ½ til filepath til aÃ° vista figure
     basefile = convertCharsToStrings(pwd);
     filename = '/Myndir/' + VariableList{i}.name + '.png';
     filePath = pwd + filename;
@@ -150,19 +154,19 @@ for i = 1 : length(VariableList)
     close(newFigure);
 end
 
-%% 5.Teikniğ upp muninn á sveigjunni í plönunum tveimur eins og sınt er á mynd 3 
+%% 5.TeikniÃ° upp muninn Ã¡ sveigjunni Ã­ plÃ¶nunum tveimur eins og sÃ½nt er Ã¡ mynd 3 
 
 % Skilgreinir plot titla
 TitleOpen = "Opin augu";
-TitleClosed = "Lokuğ augu";
+TitleClosed = "LokuÃ° augu";
 
 for i = 1 : length(VariableList)
 
     Lateral_xAs = VariableList{i}.data(:,2);
     Anteroposterior_yAs = VariableList{i}.data(:, 3);
 
-    % Athugar hvort eigi ağ notağ titil fyrir
-    % opin eğa lokuğ augu
+    % Athugar hvort eigi aÃ° notaÃ° titil fyrir
+    % opin eÃ°a lokuÃ° augu
     if VariableList{i}.type == 'open'
         Title = TitleOpen;
     else
@@ -177,10 +181,12 @@ for i = 1 : length(VariableList)
     scatter(Lateral_xAs,Anteroposterior_yAs, '.')
     axis([-25 25 -50 50]);
     
-    % Bı til filepath til ağ vista myndina
+    % BÃ½ til filepath til aÃ° vista myndina
     basefile = convertCharsToStrings(pwd);
     filename = '/Myndir/' + VariableList{i}.name + '_sveigja' + '.png';
     filePath = pwd + filename;
+    
+    fprintf('Vista sveigju mynd nr %d ...', i)  
     
     % Vista mynd
     saveas(newFigure, filePath);
@@ -194,7 +200,7 @@ end
 
 
 
-%% 6. Hvernig breytist stağan milli Q1, Q2, Q3 og Q4. Tekst fólki ağ læra inn á şağ hvernig bregağst skuli viğ örvunum?
+%% 6. Hvernig breytist staÃ°an milli Q1, Q2, Q3 og Q4. Tekst fÃ³lki aÃ° lÃ¦ra inn Ã¡ Ã¾aÃ° hvernig bregaÃ°st skuli viÃ° Ã¶rvunum?
 
 for i = 1 : length(VariableList)
 
@@ -223,7 +229,7 @@ for i = 1 : length(VariableList)
     
 end
 
-% Meğaltal af meğaltölum
+% MeÃ°altal af meÃ°altÃ¶lum
 totalMedaltalLateralQ1 = mean(medaltalLateralQ1);
 totalMedaltalLateralQ2 = mean(medaltalLateralQ2);
 totalMedaltalLateralQ3 = mean(medaltalLateralQ3);
@@ -233,7 +239,7 @@ totalMedaltalAnteroposteriorQ2 = mean(medaltalAnteroposteriorQ3);
 totalMedaltalAnteroposteriorQ3 = mean(medaltalAnteroposteriorQ3);
 totalMedaltalAnteroposteriorQ4 = mean(medaltalAnteroposteriorQ3);
 
-% Meğaltal af stağalfrávikum
+% MeÃ°altal af staÃ°alfrÃ¡vikum
 totalStdLateralQ1 = mean(stdLateralQ1);
 totalStdLateralQ2 = mean(stdLateralQ2);
 totalStdLateralQ3 = mean(stdLateralQ3);
@@ -248,16 +254,16 @@ figure;
 hold on
 subplot(2,4,1);
 histfit(medaltalLateralQ1)
-axis([-5 5 0 30]);
+axis([-10 10 0 30]);
 subplot(2,4,2);
 histfit(medaltalLateralQ2)
-axis([-5 5 0 30]);
+axis([-10 10 0 30]);
 subplot(2,4,3);
 histfit(medaltalLateralQ3)
-axis([-5 5 0 30]);
+axis([-10 10 0 30]);
 subplot(2,4,4);
 histfit(medaltalLateralQ4)
-axis([-5 5 0 30]);
+axis([-10 10 0 30]);
 subplot(2,4,5);
 histfit(medaltalAnteroposteriorQ1)
 axis([-20 20 0 30]);
@@ -271,7 +277,7 @@ subplot(2,4,8);
 histfit(medaltalAnteroposteriorQ4)
 axis([-20 20 0 30]);
 
-% Reikna út hvort şağ sé marktækur munur á milli tímabila
+% Reikna Ãºt hvort Ã¾aÃ° sÃ© marktÃ¦kur munur Ã¡ milli tÃ­mabila
 testLateralQ1vsQ2 = ttest2(medaltalLateralQ1, medaltalLateralQ2)
 testLateralQ2vsQ3 = ttest2(medaltalLateralQ2, medaltalLateralQ3)
 testLateralQ3vsQ4 = ttest2(medaltalLateralQ3, medaltalLateralQ4)
@@ -281,6 +287,6 @@ testAnteroposteriorQ2vsQ3 = ttest2(medaltalAnteroposteriorQ2, medaltalAnteropost
 testAnteroposteriorQ3vsQ4 = ttest2(medaltalAnteroposteriorQ3, medaltalAnteroposteriorQ4)
 
  
-%% 7. Geriğ greiningu á muninum milli şess ağ hafa opin augu vs ağ hafa lokuğ augu. 
+%% 7. GeriÃ° greiningu Ã¡ muninum milli Ã¾ess aÃ° hafa opin augu vs aÃ° hafa lokuÃ° augu. 
 
-%% 8. Hvağa einstaklingur stóğ sig best í prófinu miğağ viğ ykkar niğurstöğur
+%% 8. HvaÃ°a einstaklingur stÃ³Ã° sig best Ã­ prÃ³finu miÃ°aÃ° viÃ° ykkar niÃ°urstÃ¶Ã°ur
