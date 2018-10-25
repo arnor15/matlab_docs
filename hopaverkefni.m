@@ -56,7 +56,6 @@ else
     mkdir Myndir
 end
 
-
 xStimuli = stimuli(:,1);
 yStimuli = stimuli(:, 2);
 
@@ -157,7 +156,8 @@ end
 TitleOpen = ["Opin augu"];
 TitleClosed = ["Lokuð augu"];
 
-for i = 1 : length(VariableList)
+%for i = 1 : length(VariableList)
+for i = 1 : 2
     Lateral_xAs = VariableList{i}.data(:,2);
     Anteroposterior_yAs = VariableList{i}.data(:, 3);
 
@@ -174,7 +174,7 @@ for i = 1 : length(VariableList)
     title(Title);
     xlabel('Anterior/posterior [Nm]');
     ylabel('Medial/Lateral [Nm]');
-    plot(Lateral_xAs(1501:5250,Anteroposterior_yAs(1501:5250),"Marker", '.', 'Color', 'b')
+    scatter(Lateral_xAs,Anteroposterior_yAs, '.')
     axis([-20 20 -40 40]);
     hold off;
 
@@ -201,7 +201,6 @@ for i = 1 : length(VariableList)
     stdLateralQ2(i) = std(Lateral_xAs(5251:9000));
     stdLateralQ3(i) = std(Lateral_xAs(9001:12750));
     stdLateralQ4(i) = std(Lateral_xAs(12751:16500));
-    
     stdAnteroposteriorQ1(i) = std(Anteroposterior_yAs(1501:5250));
     stdAnteroposteriorQ2(i) = std(Anteroposterior_yAs(5251:9000));
     stdAnteroposteriorQ3(i) = std(Anteroposterior_yAs(9001:12750));
@@ -209,13 +208,17 @@ for i = 1 : length(VariableList)
     
 end
 
-meanTotalLateral = mean(medaltalLateralQ1);
-meanTotalAnterior = mean(medaltalAnteroposteriorQ1);
-stdMeanTotalLateral = mean(stdLateralQ1);
-stdMeanTotalAnterior =  mean(stdAnteroposteriorQ4);
-
-
-errorbar(medaltalLateralQ1,stdLateralQ1,'x')
+figure
+hold on
+bar(1, mean(stdLateralQ1))
+bar(2, mean(stdAnteroposteriorQ1))
+bar(3, mean(stdLateralQ2))
+bar(4, mean(stdAnteroposteriorQ2))
+bar(5, mean(stdLateralQ3))
+bar(6, mean(stdAnteroposteriorQ3))
+bar(7, mean(stdLateralQ4))
+bar(8, mean(stdAnteroposteriorQ4))
+hold off
 
 figure
 for i = 1 : length(VariableList)
@@ -258,8 +261,6 @@ end
     
 
     
-
-
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. 
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
