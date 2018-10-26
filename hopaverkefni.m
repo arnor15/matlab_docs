@@ -259,3 +259,16 @@ end
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. 
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
+
+
+% Sá einstaklingur sem færði sig samtals styst frá núllinu?
+
+    for j = 1 : length(VariableList)
+        sumTotal(j) = sum(VariableList{j}.data(:,2)) + sum(VariableList{j}.data(:,3)) / 16500;
+    end    
+    
+       b = abs(sumTotal);
+    indices = find(b==min(b))     
+       sumTotal(19)
+    
+    
