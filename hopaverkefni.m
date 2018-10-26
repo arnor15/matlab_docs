@@ -79,7 +79,7 @@ TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Poste
 % Plottar upp eina mynd með 3 subplottum og vistar fyrir hvert gagnasett
 for i = 1 : length(VariableList)
     
-    fprintf('Vista mynd nr %d ...', i)   
+    fprintf('Utby mynd nr %d ...', i)   
     % Býr til nýja mynd, sem birtist ekki á skjánum
     % því við ætlum bara að vista hana.
     newFigure = figure('visible', 'off');
@@ -186,8 +186,6 @@ for i = 1 : length(VariableList)
     filename = '/Myndir/' + VariableList{i}.name + '_sveigja' + '.png';
     filePath = pwd + filename;
     
-    fprintf('Vista sveigju mynd nr %d ...', i)  
-    
     % Vista mynd
     saveas(newFigure, filePath);
     
@@ -202,89 +200,60 @@ end
 
 %% 6. Hvernig breytist staðan milli Q1, Q2, Q3 og Q4. Tekst fólki að læra inn á það hvernig bregaðst skuli við örvunum?
 
-for i = 1 : length(VariableList)
+for i = 1 : 16500
 
-    Lateral_xAs = VariableList{i}.data(:,2);
-    Anteroposterior_yAs = VariableList{i}.data(:, 3);
+    for j = 1 : length(VariableList)
+       Lateral(j) = VariableList{j}.data(i,2);
+       Anteroposterior(j) = VariableList{j}.data(i, 3);
+    end
     
-    %medaltalLateralQS(i) = mean(Lateral_xAs(1:1500));
-    medaltalLateralQ1(i) = mean(Lateral_xAs(1501:5250));
-    medaltalLateralQ2(i) = mean(Lateral_xAs(5251:9000));
-    medaltalLateralQ3(i) = mean(Lateral_xAs(9001:12750));
-    medaltalLateralQ4(i) = mean(Lateral_xAs(12751:16500));
-    %medaltalAnteroposteriorQS(i) = mean(Anteroposterior_yAs(1:1500));
-    medaltalAnteroposteriorQ1(i) = mean(Anteroposterior_yAs(1501:5250));
-    medaltalAnteroposteriorQ2(i) = mean(Anteroposterior_yAs(5251:9000));
-    medaltalAnteroposteriorQ3(i) = mean(Anteroposterior_yAs(9001:12750));
-    medaltalAnteroposteriorQ4(i) = mean(Anteroposterior_yAs(12751:16500));
-
-    stdLateralQ1(i) = std(Lateral_xAs(1501:5250));
-    stdLateralQ2(i) = std(Lateral_xAs(5251:9000));
-    stdLateralQ3(i) = std(Lateral_xAs(9001:12750));
-    stdLateralQ4(i) = std(Lateral_xAs(12751:16500));
-    stdAnteroposteriorQ1(i) = std(Anteroposterior_yAs(1501:5250));
-    stdAnteroposteriorQ2(i) = std(Anteroposterior_yAs(5251:9000));
-    stdAnteroposteriorQ3(i) = std(Anteroposterior_yAs(9001:12750));
-    stdAnteroposteriorQ4(i) = std(Anteroposterior_yAs(12751:16500));
+    meanLateral(i) = mean(Lateral);
+    meanAnteroposterior(i) = mean(Anteroposterior);
     
 end
 
-% Meðaltal af meðaltölum
-totalMedaltalLateralQ1 = mean(medaltalLateralQ1);
-totalMedaltalLateralQ2 = mean(medaltalLateralQ2);
-totalMedaltalLateralQ3 = mean(medaltalLateralQ3);
-totalMedaltalLateralQ4 = mean(medaltalLateralQ4);
-totalMedaltalAnteroposteriorQ1 = mean(medaltalAnteroposteriorQ3);
-totalMedaltalAnteroposteriorQ2 = mean(medaltalAnteroposteriorQ3);
-totalMedaltalAnteroposteriorQ3 = mean(medaltalAnteroposteriorQ3);
-totalMedaltalAnteroposteriorQ4 = mean(medaltalAnteroposteriorQ3);
+    newFigure = figure;
+    hold on
+    title('Title');
+    xlabel('Anterior/posterior [Nm]');
+    ylabel('Medial/Lateral [Nm]');
+    scatter(meanLateral,meanAnteroposterior, '.')
+    axis([-5 5 -25 25]);
+    
+    
+    x = (1:16500);
+    yLat = meanLateral;
+    yAnt = meanAnteroposterior;
+    
+    figure
+    hold on
+    pLat = polyfit(x,yLat,2);
+    y_fitLat = polyval(pLat, x);
+    plot(x(1501:5250),yLat(1501:5250),'r.',x,y_fitLat);
+    plot(x(5251:9000),yLat(5251:9000),'g.',x,y_fitLat);
+    plot(x(9001:12750),yLat(9001:12750),'b.',x,y_fitLat);
+    plot(x(12751:16500),yLat(12751:16500),'k.',x,y_fitLat);
+    hold off
+    
+    figure
+    hold on
+    pAnt = polyfit(x,yAnt,2);
+    y_fitAnt = polyval(pAnt, x);
+    plot(x(1501:5250),yAnt(1501:5250),'r.',x,y_fitAnt);
+    plot(x(5251:9000),yAnt(5251:9000),'g.',x,y_fitAnt);
+    plot(x(9001:12750),yAnt(9001:12750),'b.',x,y_fitAnt);
+    plot(x(12751:16500),yAnt(12751:16500),'k.',x,y_fitAnt);
 
-% Meðaltal af staðalfrávikum
-totalStdLateralQ1 = mean(stdLateralQ1);
-totalStdLateralQ2 = mean(stdLateralQ2);
-totalStdLateralQ3 = mean(stdLateralQ3);
-totalStdLateralQ4 = mean(stdLateralQ4);
-totalStdAnteroposteriorQ1 = mean(stdAnteroposteriorQ1);
-totalStdAnteroposteriorQ2 = mean(stdAnteroposteriorQ2);
-totalStdAnteroposteriorQ3 = mean(stdAnteroposteriorQ3);
-totalStdAnteroposteriorQ4 = mean(stdAnteroposteriorQ4);
-
-% Teikna mynd af dreifingu
-figure;
-hold on
-subplot(2,4,1);
-histfit(medaltalLateralQ1)
-axis([-10 10 0 30]);
-subplot(2,4,2);
-histfit(medaltalLateralQ2)
-axis([-10 10 0 30]);
-subplot(2,4,3);
-histfit(medaltalLateralQ3)
-axis([-10 10 0 30]);
-subplot(2,4,4);
-histfit(medaltalLateralQ4)
-axis([-10 10 0 30]);
-subplot(2,4,5);
-histfit(medaltalAnteroposteriorQ1)
-axis([-20 20 0 30]);
-subplot(2,4,6);
-histfit(medaltalAnteroposteriorQ2)
-axis([-20 20 0 30]);
-subplot(2,4,7);
-histfit(medaltalAnteroposteriorQ3)
-axis([-20 20 0 30]);
-subplot(2,4,8);
-histfit(medaltalAnteroposteriorQ4)
-axis([-20 20 0 30]);
-
-% Reikna út hvort það sé marktækur munur á milli tímabila
-testLateralQ1vsQ2 = ttest2(medaltalLateralQ1, medaltalLateralQ2)
-testLateralQ2vsQ3 = ttest2(medaltalLateralQ2, medaltalLateralQ3)
-testLateralQ3vsQ4 = ttest2(medaltalLateralQ3, medaltalLateralQ4)
-
-testAnteroposteriorQ1vsQ2 = ttest2(medaltalAnteroposteriorQ1, medaltalAnteroposteriorQ2)
-testAnteroposteriorQ2vsQ3 = ttest2(medaltalAnteroposteriorQ2, medaltalAnteroposteriorQ3)
-testAnteroposteriorQ3vsQ4 = ttest2(medaltalAnteroposteriorQ3, medaltalAnteroposteriorQ4)
+ 
+ testLatQ1vsQ2 = ttest2(meanLateral(1501:5250), meanLateral(5251:9000))
+ testLatQ3vsQ4 = ttest2(meanLateral(5251:9000), meanLateral(9001:12750))
+ testLatQ3vsQ4 = ttest2(meanLateral(9001:12750), meanLateral(12751:16500))
+ 
+ testLatQ1vsQ4 = ttest2(meanLateral(1501:5250), meanLateral(12751:16500))
+ 
+ testAntQ1vsQ4 = ttest2(meanAnteroposterior(1501:5250), meanAnteroposterior(12751:16500))
+  
+ 
 
  
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. 
