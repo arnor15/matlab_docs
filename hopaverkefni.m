@@ -44,7 +44,7 @@ end
 
 %% 3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window
 
-calculateStimuli(stimuli)           
+calculateStimuli(stimuli)        
 
 
 %% 4. Teiknið upp gröfin fyrir einstaklingana eins og sést er á mynd 2 og látið Matlab vista myndirnar sjálfkrafa í undirmöppunni "myndir"
@@ -52,9 +52,9 @@ calculateStimuli(stimuli)
 % Fyrst að athuga hvort mappan "Myndir" sé til, 
 % ef ekki, þá búa hana til
 if exist('Myndir', 'dir') == 7
-    fprintf('Mappan myndir er til')
+    fprintf('Mappan myndir er þegar til...\n')
 else
-    fprintf('Mappan myndir er ekki til, by hana til...')
+    fprintf('Mappan myndir er ekki til, by hana til...\n')
     mkdir Myndir
 end
 
@@ -79,7 +79,7 @@ TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Poste
 % Plottar upp eina mynd með 3 subplottum og vistar fyrir hvert gagnasett
 for i = 1 : length(VariableList)
     
-    fprintf('Utby mynd nr %d ...', i)   
+    fprintf('Bý til mynd nr %d ...\n', i)   
     % Býr til nýja mynd, sem birtist ekki á skjánum
     % því við ætlum bara að vista hana.
     newFigure = figure('visible', 'off');
@@ -161,9 +161,10 @@ TitleOpen = "Opin augu";
 TitleClosed = "Lokuð augu";
 
 for i = 1 : length(VariableList)
-
+    fprintf('Bý til sveigju mynd nr %d ...\n', i) 
+    
     Lateral_xAs = VariableList{i}.data(:,2);
-    Anteroposterior_yAs = VariableList{i}.data(:, 3);
+    AnteriorPosterior_yAs = VariableList{i}.data(:, 3);
 
     % Athugar hvort eigi að notað titil fyrir
     % opin eða lokuð augu
@@ -178,7 +179,7 @@ for i = 1 : length(VariableList)
     title(Title);
     xlabel('Anterior/posterior [Nm]');
     ylabel('Medial/Lateral [Nm]');
-    scatter(Lateral_xAs,Anteroposterior_yAs, '.')
+    scatter(Lateral_xAs,AnteriorPosterior_yAs, '.')
     axis([-25 25 -50 50]);
     
     % Bý til filepath til að vista myndina
@@ -195,80 +196,216 @@ for i = 1 : length(VariableList)
 end
 
 
-
-
-
 %% 6. Hvernig breytist staðan milli Q1, Q2, Q3 og Q4. Tekst fólki að læra inn á það hvernig bregaðst skuli við örvunum?
 
+%  Lykkja sem leggur saman öll stök allra þáttakenda(SUBJECTS) og 
+%  finnur meðaltöl þeirra. T.d. þá er byrjað á því að taka stak nr
+%  1 fyrir bæði lateral og Anteroposterior fyrir alla þáttakendur 
+%  og það er lagt saman, fundið meðaltal af þeim og þau svo geymd
+%  í breytunum meanLateral og meanAnteroposterior. 
+%  Þannig er fundið eitt meðaltal fyrir alla þáttakendur.
 for i = 1 : 16500
 
     for j = 1 : length(VariableList)
        Lateral(j) = VariableList{j}.data(i,2);
-       Anteroposterior(j) = VariableList{j}.data(i, 3);
+       AnteriorPosterior(j) = VariableList{j}.data(i, 3);
     end
     
-    meanLateral(i) = mean(Lateral);
-    meanAnteroposterior(i) = mean(Anteroposterior);
+    % Til að gögnin vinni ekki á móti hvoru öðru þegar tekið er meðaltal (sumar
+    % tölurnar eru mínustölur) þá er tekið "abs" af öllum gögnunum. þ.e. mínus-
+    % tölunum breytt í plústölur
+    
+    meanLateral(i) = mean(abs(Lateral));
+    meanAnteriorPosterior(i) = mean(abs(AnteriorPosterior));
     
 end
 
-    newFigure = figure;
-    hold on
-    title('Title');
-    xlabel('Anterior/posterior [Nm]');
-    ylabel('Medial/Lateral [Nm]');
-    scatter(meanLateral,meanAnteroposterior, '.')
-    axis([-5 5 -25 25]);
-    
-    
-    x = (1:16500);
-    yLat = meanLateral;
-    yAnt = meanAnteroposterior;
-    
-    figure
-    hold on
-    pLat = polyfit(x,yLat,2);
-    y_fitLat = polyval(pLat, x);
-    plot(x(1501:5250),yLat(1501:5250),'r.',x,y_fitLat);
-    plot(x(5251:9000),yLat(5251:9000),'g.',x,y_fitLat);
-    plot(x(9001:12750),yLat(9001:12750),'b.',x,y_fitLat);
-    plot(x(12751:16500),yLat(12751:16500),'k.',x,y_fitLat);
-    hold off
-    
-    figure
-    hold on
-    pAnt = polyfit(x,yAnt,2);
-    y_fitAnt = polyval(pAnt, x);
-    plot(x(1501:5250),yAnt(1501:5250),'r.',x,y_fitAnt);
-    plot(x(5251:9000),yAnt(5251:9000),'g.',x,y_fitAnt);
-    plot(x(9001:12750),yAnt(9001:12750),'b.',x,y_fitAnt);
-    plot(x(12751:16500),yAnt(12751:16500),'k.',x,y_fitAnt);
+% Fyrst er lögð fram núlltilgáta um að enginn munur sé á milli tímabila, ef
+% svo er þá þarf ekki að halda áfram að svara spurningu um hvort
+% einstaklingar læri á milli tímabila þar sem enginn munur er á milli
+% þeirra.
+% Er munur á milli tímabila?
+QAll =[Q1; Q2; Q3; Q4];
+rotatedQAll = rot90(QAll)
+timabil = {'Q1' 'Q2' 'Q3' 'Q4' }
+p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
+                                    % sem þýðir að það sé munur á milli tímabila.
+                                    % Því þarf að halda áfram að svara
+                                    % spurningu um hvort dreifnin minnki á
+                                    % milli Q1 og að Q4.
 
- 
- testLatQ1vsQ2 = ttest2(meanLateral(1501:5250), meanLateral(5251:9000))
- testLatQ3vsQ4 = ttest2(meanLateral(5251:9000), meanLateral(9001:12750))
- testLatQ3vsQ4 = ttest2(meanLateral(9001:12750), meanLateral(12751:16500))
- 
- testLatQ1vsQ4 = ttest2(meanLateral(1501:5250), meanLateral(12751:16500))
- 
- testAntQ1vsQ4 = ttest2(meanAnteroposterior(1501:5250), meanAnteroposterior(12751:16500))
-  
- 
+% Hér á ábyggilega best að bera saman standard deviation (std) á
+% milli tímabilana til að bera saman hversu dreifð gögnin séu.
 
- 
+% Finna meðaldreifni á fyrir alla einstaklinga á Q1 - Q4
+meanLatQ1 = mean(meanLateral(1501:5250));
+meanLatQ2 = mean(meanLateral(5251:9000));
+meanLatQ3 = mean(meanLateral(9001:12750));
+meanLatQ4 = mean(meanLateral(12751:16500));
+meanLatAll = [meanLatQ1, meanLatQ2, meanLatQ3, meanLatQ4];
+meanPosQ1 = mean(meanAnteriorPosterior(1501:5250));
+meanPosQ2 = mean(meanAnteriorPosterior(5251:9000));
+meanPosQ3 = mean(meanAnteriorPosterior(9001:12750));
+meanPosQ4 = mean(meanAnteriorPosterior(12751:16500));
+meanPosAll = [meanPosQ1, meanPosQ2, meanPosQ3, meanPosQ4];
+
+% Finna staðalfrávik á fyrir alla einstaklinga á Q1 - Q4
+stdLatQ1 = std(meanLateral(1501:5250));
+stdLatQ2 = std(meanLateral(5251:9000));
+stdLatQ3 = std(meanLateral(9001:12750));
+stdLatQ4 = std(meanLateral(12751:16500));
+stdLatAll = [stdLatQ1, stdLatQ2, stdLatQ3, stdLatQ4];
+stdPosQ1 = std(meanAnteriorPosterior(1501:5250));
+stdPosQ2 = std(meanAnteriorPosterior(5251:9000));
+stdPosQ3 = std(meanAnteriorPosterior(9001:12750));
+stdPosQ4 = std(meanAnteriorPosterior(12751:16500));
+stdPosAll = [stdPosQ1, stdPosQ2, stdPosQ3, stdPosQ4];
+
+% Teikna upp errorbar
+figure
+subplot(1,2,1)
+hold on
+ax = axis;
+errorbar(meanLatAll,stdLatAll, '.', 'Vertical', 'MarkerFaceColor','red');
+axis([0 5 2 4])
+title('Lateral-Hreyfing');
+xlabel ('Tímabil Q1-Q4');
+ylabel ('Staðalfrávik');
+legend('Q1 - Q4 Lateral');
+
+% Teikna upp errorbar
+subplot(1,2,2)
+ax = axis;
+errorbar(meanPosAll,stdPosAll, '.', 'Vertical', 'MarkerFaceColor','blue');
+axis([0 5 5 11])
+title('Anterior/Posterior - Hreyfing');
+xlabel ('Tímabil Q1-Q4');
+ylabel ('Staðalfrávik');
+legend('Q1-Q4 Posterior/Anterior');
+    
+% Hvað sést útfrá á teikningum?
+
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. 
+
+% for i = 1 : 16500
+%     openCounter = 1;
+%     closedCounter = 1;
+%     for j = 1 : length(VariableList)
+%         if VariableList{j}.type == 'open'
+%             openLateral(openCounter) = VariableList{j}.data(i,2);
+%             openAnteriorPosterior(openCounter) = VariableList{j}.data(i, 3);
+%             openCounter = openCounter + 1;
+%         else
+%             closedLateral(closedCounter) = VariableList{j}.data(i,2);
+%             closedAnteriorPosterior(closedCounter) = VariableList{j}.data(i, 3);
+%             closedCounter = closedCounter + 1;
+%         end
+%     end
+%     
+%  meanOpenLateral(i) = mean(openLateral);
+%  meanOpenAnteriorPosterior(i) = mean(openAnteriorPosterior);
+%  meanClosedLateral(i) = mean(closedLateral);
+%  meanClosedAnteriorPosterior(i) = mean(closedAnteriorPosterior);
+% end
+% 
+% %  Reiknar út fjarlægðina sem þáttakandi er frá 
+% %  núlli (0,0) fyrir hverja mælingu. x og y.
+% %  hypot er sama og "sqrt((x-0).^2 + (y-0).^2)"
+% distancesFromZeroOpenEyes = hypot(meanOpenLateral,meanOpenAnteriorPosterior);
+% distancesFromZeroClosedEyes = hypot(meanClosedLateral,meanClosedAnteriorPosterior);
+% 
+% % útskýring á ttest2, af netinu:
+% % returns a test decision for the null hypothesis that the data in vectors x 
+% % and y comes from independent random samples from normal distributions with 
+% % equal means and equal but unknown variances, using the two-sample t-test. 
+% % The alternative hypothesis is that the data in x and y comes from populations 
+% % with unequal means. The result h is 1 if the test rejects the null hypothesis 
+% %at the 5% significance level, and 0 otherwise.
+% ttest2(distancesFromZeroOpenEyes,distancesFromZeroClosedEyes)   % Segir að það sé munur á milli
+% ttest2(meanOpenLateral,meanClosedLateral)                       % Segir að það sé munur á milli
+% ttest2(meanOpenAnteriorPosterior,meanClosedAnteriorPosterior)   % Segir að það sé munur á milli
+%                                                                 % Öll test segja að það sé munur á milli þess að hafa augun opin og lokuð
+% % Er munur á milli tímabila? ANOVA test
+% QAll =[distancesFromZeroOpenEyes; distancesFromZeroClosedEyes];
+% rotatedQAll = rot90(QAll)
+% timabil = {'Open eyes' 'Closed eyes'}
+% p = anova1(rotatedQAll, timabil); % Já það er munur. P gildið þarf að vera hærra en 0.5% til að núlltilgátan sé samþykkt
+% 
+% newFigure = figure;
+% hold on
+% plot(meanOpenLateral,meanOpenAnteriorPosterior,'r.');
+% hold off
+% 
+% figure;
+% subplot(2,2,1);
+% hist(meanOpenLateral)
+% subplot(2,2,2);
+% hist(meanClosedLateral)
+% subplot(2,2,3);
+% hist(meanOpenAnteriorPosterior)
+% subplot(2,2,4);
+% hist(meanClosedAnteriorPosterior)
+
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
 
+% Tvær aðferðir notaðar.
+    % 1. Sá einstaklingur með lægsta meðaltalið verður valin bestur.
+    %    Mínustölum umbreytt yfir í plústölur fyrir Lateral og 
+    %    Anterior/Posterior sem svo eru lagðar saman og meðaltal tekið. 
 
-% Sá einstaklingur sem færði sig samtals styst frá núllinu?
+    % 2. Sá einstaklingur sem færði sig samtals styst frá núllinu
+    %    Hér er reiknuð samtalan, fyrir hvern einasta einstakling, hversu 
+    %    langt hvert hnit (Lateral, AnteriorPosterior) fór frá
+    %    núllpunkti(0,0) við hverja mælingu
 
-    for j = 1 : length(VariableList)
-        sumTotal(j) = sum(VariableList{j}.data(:,2)) + sum(VariableList{j}.data(:,3)) / 16500;
-    end    
+% AÐFERÐ 1:
+for j = 1 : length(VariableList)
+       
+    % Samtala reiknuð
+    result(j) = sum(abs(VariableList{j}.data(:,2)) + abs(VariableList{j}.data(:,3))) / 16500;
     
-       b = abs(sumTotal);
-    indices = find(b==min(b))     
-       sumTotal(19)
+    % Grípum nafnið með
+    name(j) = VariableList{j}.name;
     
+end
+
+% Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
+% þar af leiðandi best í prófinu
+smallest = result(1)
+for j = 2 : length(result)
+    if result(j) < smallest
+        smallest = result(j);
+    end
+end
+
+% Finnur einstaklinginn sem er stysst frá núlli
+name(find(result == smallest))  
+
+
+% AÐFERÐ 2:
+
+for j = 1 : length(VariableList)
+       
+    % Tölur næsta núlli reiknaðar
+    %  hypot er sama og "sqrt((x-0).^2 + (y-0).^2)"
+    result(j) = sum(hypot((VariableList{j}.data(:,2)),(VariableList{j}.data(:,3))));
+    result(j) = (result(j) / 16500);
+    % Grípum nafnið með
+    name(j) = VariableList{j}.name;
     
+end
+
+% Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
+% þar af leiðandi best í prófinu
+smallest = result(1)
+for j = 2 : length(result)
+    if result(j) < smallest
+        smallest = result(j);
+    end
+end
+
+% Finnur einstaklinginn sem er stysst frá núlli
+name(find(result == smallest))
+
+% Báðar aðferðirnar benda á "SUB24_closed" sem besti einstaklingurinn.
