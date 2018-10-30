@@ -3,6 +3,7 @@ clear all
 clc
 
 %% 1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn 
+fprintf('1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn \n') 
 
 % Sæki stimuli skránna sem verður notuð í öllum plotum
 stimuli = xlsread('Stimuli.xlsx');
@@ -39,15 +40,18 @@ for i = 1 : length(dirData)
 end
 
 %% 2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma?
+fprintf('2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma? \n') 
 
 % ?
 
 %% 3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window
+fprintf('3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window \n')
 
 calculateStimuli(stimuli)        
 
 
 %% 4. Teiknið upp gröfin fyrir einstaklingana eins og sést er á mynd 2 og látið Matlab vista myndirnar sjálfkrafa í undirmöppunni "myndir"
+fprintf('4. Teiknið upp gröfin fyrir einstaklingana eins og sést er á mynd 2 og látið Matlab vista myndirnar sjálfkrafa í undirmöppunni - myndir \n')
 
 % Fyrst að athuga hvort mappan "Myndir" sé til, 
 % ef ekki, þá búa hana til
@@ -155,6 +159,7 @@ for i = 1 : length(VariableList)
 end
 
 %% 5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt er á mynd 3 
+fprintf('5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt er á mynd 3 \n')
 
 % Skilgreinir plot titla
 TitleOpen = "Opin augu";
@@ -197,6 +202,7 @@ end
 
 
 %% 6. Hvernig breytist staðan milli Q1, Q2, Q3 og Q4. Tekst fólki að læra inn á það hvernig bregaðst skuli við örvunum?
+fprintf('6. Hvernig breytist staðan milli Q1, Q2, Q3 og Q4. Tekst fólki að læra inn á það hvernig bregaðst skuli við örvunum? \n')
 
 %  Lykkja sem leggur saman öll stök allra þáttakenda(SUBJECTS) og 
 %  finnur meðaltöl þeirra. T.d. þá er byrjað á því að taka stak nr
@@ -214,7 +220,6 @@ for i = 1 : 16500
     % Til að gögnin vinni ekki á móti hvoru öðru þegar tekið er meðaltal (sumar
     % tölurnar eru mínustölur) þá er tekið "abs" af öllum gögnunum. þ.e. mínus-
     % tölunum breytt í plústölur
-    
     meanLateral(i) = mean(abs(Lateral));
     meanAnteriorPosterior(i) = mean(abs(AnteriorPosterior));
     
@@ -224,18 +229,36 @@ end
 % svo er þá þarf ekki að halda áfram að svara spurningu um hvort
 % einstaklingar læri á milli tímabila þar sem enginn munur er á milli
 % þeirra.
-% Er munur á milli tímabila?
-QAll =[Q1; Q2; Q3; Q4];
-rotatedQAll = rot90(QAll)
-timabil = {'Q1' 'Q2' 'Q3' 'Q4' }
+% Er munur á milli Lateral tímabila?
+LatQ1 = meanLateral(1501:5250);
+LatQ2 = meanLateral(5251:9000);
+LatQ3 = meanLateral(9001:12750);
+LatQ4 = meanLateral(12751:16500);
+QLateralAll =[LatQ1; LatQ2; LatQ3; LatQ4];
+rotatedQAll = rot90(QLateralAll)
+timabil = {'Q1' 'Q2' 'Q3' 'Q4'}
+p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
+                                    % sem þýðir að það sé munur á milli tímabila.
+                                    % Því þarf að halda áfram að svara
+                                    % spurningu um hvort dreifnin minnki á
+                                    % milli Q1 og að Q4.
+                                    
+% Er munur á milli Anterior/Posterior tímabila?
+PosQ1 = meanAnteriorPosterior(1501:5250);
+PosQ2 = meanAnteriorPosterior(5251:9000);
+PosQ3 = meanAnteriorPosterior(9001:12750);
+PosQ4 = meanAnteriorPosterior(12751:16500);
+QLateralAll =[PosQ1; PosQ2; PosQ3; PosQ4];
+rotatedQAll = rot90(QLateralAll)
+timabil = {'Q1' 'Q2' 'Q3' 'Q4'}
 p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
                                     % sem þýðir að það sé munur á milli tímabila.
                                     % Því þarf að halda áfram að svara
                                     % spurningu um hvort dreifnin minnki á
                                     % milli Q1 og að Q4.
 
-% Hér á ábyggilega best að bera saman standard deviation (std) á
-% milli tímabilana til að bera saman hversu dreifð gögnin séu.
+% Næst er ábyggilega best að bera saman standard deviation (std) á
+% milli tímabilana til að skoða hversu dreifð gögnin eru.
 
 % Finna meðaldreifni á fyrir alla einstaklinga á Q1 - Q4
 meanLatQ1 = mean(meanLateral(1501:5250));
@@ -285,7 +308,8 @@ legend('Q1-Q4 Posterior/Anterior');
     
 % Hvað sést útfrá á teikningum?
 
-%% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. 
+%% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu.
+fprintf('7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. \n')
 
 % for i = 1 : 16500
 %     openCounter = 1;
@@ -348,6 +372,7 @@ legend('Q1-Q4 Posterior/Anterior');
 
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
+fprintf('8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður \n')
 
 % Tvær aðferðir notaðar.
     % 1. Sá einstaklingur með lægsta meðaltalið verður valin bestur.
@@ -360,6 +385,8 @@ legend('Q1-Q4 Posterior/Anterior');
     %    núllpunkti(0,0) við hverja mælingu
 
 % AÐFERÐ 1:
+fprintf('AÐFERÐ 1: \n')
+
 for j = 1 : length(VariableList)
        
     % Samtala reiknuð
@@ -372,7 +399,7 @@ end
 
 % Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
 % þar af leiðandi best í prófinu
-smallest = result(1)
+smallest = result(1);
 for j = 2 : length(result)
     if result(j) < smallest
         smallest = result(j);
@@ -380,10 +407,12 @@ for j = 2 : length(result)
 end
 
 % Finnur einstaklinginn sem er stysst frá núlli
-name(find(result == smallest))  
+winner = name(find(result == smallest));
+fprintf('Sigurvegari = %s \n', winner)
 
 
 % AÐFERÐ 2:
+fprintf('AÐFERÐ 2: \n')
 
 for j = 1 : length(VariableList)
        
@@ -398,7 +427,7 @@ end
 
 % Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
 % þar af leiðandi best í prófinu
-smallest = result(1)
+smallest = result(1);
 for j = 2 : length(result)
     if result(j) < smallest
         smallest = result(j);
@@ -406,6 +435,6 @@ for j = 2 : length(result)
 end
 
 % Finnur einstaklinginn sem er stysst frá núlli
-name(find(result == smallest))
-
+winner = name(find(result == smallest));
+fprintf('Sigurvegari = %s \n', winner)
 % Báðar aðferðirnar benda á "SUB24_closed" sem besti einstaklingurinn.
