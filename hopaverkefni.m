@@ -360,7 +360,7 @@ hist(meanAbsClosedLateral)
 subplot(2,2,3);
 hist(meanAbsOpenAnteriorPosterior)
 subplot(2,2,4);
-hist(meanAbsClosedAnteriorPosterior)
+hist(meanClosedAnteriorPosterior)
 
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
@@ -420,7 +420,6 @@ end
 % Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
 % þar af leiðandi best í prófinu
 smallest = result(1);
-name = result(1);
 for j = 2 : length(result)
     if result(j) < smallest
         smallest = result(j);
