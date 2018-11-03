@@ -1,52 +1,59 @@
 function [ ] = calculateStimuli(stimuli)
 %{
-    Á meğan lykkjan fer í gegnum hvert einasta stak í mælingum,
-    skiptir hún á milli undir lykkja í hvers skipti sem stimulus
-    færist á milli 20 og 59. Í hvert skipti sem hún færist á milli 
+    Ã meÃ°an lykkjan fer Ã­ gegnum hvert einasta stak Ã­ mÃ¦lingum,
+    skiptir hÃºn Ã¡ milli undir lykkja Ã­ hvers skipti sem stimulus
+    fÃ¦rist Ã¡ milli 20 og 59. Ã hvert skipti sem hÃºn fÃ¦rist Ã¡ milli 
     telur "stimuliCounter" stimulusinn.
 
-    Í hvert skipti sem mælingin er undir stimulus (59) er tíminn sem şağ
-    tekur mældur og geymdur í "stimuliCurrentTime"
-    Eftir ağ hvert stimulus tímabil klárast er tíminn sem şağ tók safnağ
-    fyrir í "stimuliTotalTimes"
+    Ã hvert skipti sem mÃ¦lingin er undir stimulus (59) er tÃ­minn sem Ã¾aÃ°
+    tekur mÃ¦ldur og geymdur Ã­ "stimuliCurrentTime"
+    Eftir aÃ° hvert stimulus tÃ­mabil klÃ¡rast er tÃ­minn sem Ã¾aÃ° tÃ³k safnaÃ°
+    fyrir Ã­ "stimuliTotalTimes"
 
-    Şegar ağallykkjan klárast er meğaltal allra mælinga reiknağ.
+    Ãegar aÃ°allykkjan klÃ¡rast er meÃ°altal allra mÃ¦linga reiknaÃ°.
 %} 
 
 
-stimuliTime = stimuli(:, 1);            % Filtera allar stimuli time mælingar
-stimulusNm = stimuli(:, 2);             % Filtera allar "Torque" mælingar
-stimulusLength = length(stimulusNm);    % Fjöldi mælingar
+stimuliTime = stimuli(:, 1);            % Filtera allar stimuli time mÃ¦lingar
+stimulusNm = stimuli(:, 2);             % Filtera allar "Torque" mÃ¦lingar
+stimulusLength = length(stimulusNm);    % FjÃ¶ldi mÃ¦lingar
 
-stimuliCounter = 0;             % Upphafspunktur fyrir fjölda stimulusa
-stimuliTotalTimes = [];         % Samlagning á fjölda tímabila sem stimulus stóğ yfir
+stimuliCounter = 0;             % Upphafspunktur fyrir fjÃ¶lda stimulusa
+stimuliTotalTimes = [];         % Samlagning Ã¡ fjÃ¶lda tÃ­mabila sem stimulus stÃ³Ã° yfir
 stimuliTotalTimesCounter = 1;
 i = 1;
 
 while i ~= stimulusLength
     
+    % Lykkja sem heldur Ã¡fram Ã¡ meÃ°an stimulus er 20,
+    % hÃ¦ttir um leiÃ° og t.d. 59 kemur upp.
     while stimulusNm(i) == 20 && i ~= stimulusLength
         i = i + 1;
     end
     
+    % Telur hversu oft er fariÃ° frÃ¡ 20 yfir Ã­ 59
     stimuliCounter = stimuliCounter + 1; 
     
+    % Teljarar fyrir nÃ¦stu while lykkju nÃºllstilltir
     stimuliCurrentTime = [];
     stimuliCurrentTimeCounter = 0;
     
+    % Lykkja sem heldur Ã¡fram Ã¡ meÃ°an stimulus er 59,
+    % hÃ¦ttir um leiÃ° og t.d. 20 kemur upp.
     while stimulusNm(i) == 59 && i ~= stimulusLength
         stimuliCurrentTimeCounter = stimuliCurrentTimeCounter + 1;
         stimuliCurrentTime(stimuliCurrentTimeCounter) = stimuliTime(i);
         i = i + 1;
     end
-    % Geymi tímalengd hvers stimulus fyrir sig
+    
+    % Telur sekÃºnturnar sem stimulus var Ã­ 59 og geymir Ã­ "stimuliTotalTimes"
     stimuliTotalTimes(stimuliTotalTimesCounter) = stimuliCurrentTime(end) - stimuliCurrentTime(1);
     stimuliTotalTimesCounter = stimuliTotalTimesCounter + 1;
 end
 
 StimuliMeanTime = sum(stimuliTotalTimes) / stimuliCounter;
 
-fprintf('Heildarfjöldi stimulu er %d\n', stimuliCounter);
-fprintf('Meğaltími hvers stimulus er %.2f sekúntur\n', StimuliMeanTime); 
+fprintf('HeildarfjÃ¶ldi stimulu er %d\n', stimuliCounter);
+fprintf('MeÃ°altÃ­mi hvers stimulus er %.2f sekÃºntur\n', StimuliMeanTime); 
 
 end
