@@ -311,64 +311,56 @@ legend('Q1-Q4 Posterior/Anterior');
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu.
 fprintf('7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. \n')
 
-% for i = 1 : 16500
-%     openCounter = 1;
-%     closedCounter = 1;
-%     for j = 1 : length(VariableList)
-%         if VariableList{j}.type == 'open'
-%             openLateral(openCounter) = VariableList{j}.data(i,2);
-%             openAnteriorPosterior(openCounter) = VariableList{j}.data(i, 3);
-%             openCounter = openCounter + 1;
-%         else
-%             closedLateral(closedCounter) = VariableList{j}.data(i,2);
-%             closedAnteriorPosterior(closedCounter) = VariableList{j}.data(i, 3);
-%             closedCounter = closedCounter + 1;
-%         end
-%     end
-%     
-%  meanOpenLateral(i) = mean(openLateral);
-%  meanOpenAnteriorPosterior(i) = mean(openAnteriorPosterior);
-%  meanClosedLateral(i) = mean(closedLateral);
-%  meanClosedAnteriorPosterior(i) = mean(closedAnteriorPosterior);
-% end
-% 
-% %  Reiknar út fjarlægðina sem þáttakandi er frá 
-% %  núlli (0,0) fyrir hverja mælingu. x og y.
-% %  hypot er sama og "sqrt((x-0).^2 + (y-0).^2)"
-% distancesFromZeroOpenEyes = hypot(meanOpenLateral,meanOpenAnteriorPosterior);
-% distancesFromZeroClosedEyes = hypot(meanClosedLateral,meanClosedAnteriorPosterior);
-% 
-% % útskýring á ttest2, af netinu:
-% % returns a test decision for the null hypothesis that the data in vectors x 
-% % and y comes from independent random samples from normal distributions with 
-% % equal means and equal but unknown variances, using the two-sample t-test. 
-% % The alternative hypothesis is that the data in x and y comes from populations 
-% % with unequal means. The result h is 1 if the test rejects the null hypothesis 
-% %at the 5% significance level, and 0 otherwise.
-% ttest2(distancesFromZeroOpenEyes,distancesFromZeroClosedEyes)   % Segir að það sé munur á milli
-% ttest2(meanOpenLateral,meanClosedLateral)                       % Segir að það sé munur á milli
-% ttest2(meanOpenAnteriorPosterior,meanClosedAnteriorPosterior)   % Segir að það sé munur á milli
-%                                                                 % Öll test segja að það sé munur á milli þess að hafa augun opin og lokuð
-% % Er munur á milli tímabila? ANOVA test
-% QAll =[distancesFromZeroOpenEyes; distancesFromZeroClosedEyes];
-% rotatedQAll = rot90(QAll)
-% timabil = {'Open eyes' 'Closed eyes'}
-% p = anova1(rotatedQAll, timabil); % Já það er munur. P gildið þarf að vera hærra en 0.5% til að núlltilgátan sé samþykkt
-% 
-% newFigure = figure;
-% hold on
-% plot(meanOpenLateral,meanOpenAnteriorPosterior,'r.');
-% hold off
-% 
-% figure;
-% subplot(2,2,1);
-% hist(meanOpenLateral)
-% subplot(2,2,2);
-% hist(meanClosedLateral)
-% subplot(2,2,3);
-% hist(meanOpenAnteriorPosterior)
-% subplot(2,2,4);
-% hist(meanClosedAnteriorPosterior)
+for i = 1 : 16500
+    openCounter = 1;
+    closedCounter = 1;
+    for j = 1 : length(VariableList)
+        if VariableList{j}.type == 'open'
+            openLateral(openCounter) = VariableList{j}.data(i,2);
+            openAnteriorPosterior(openCounter) = VariableList{j}.data(i, 3);
+            openCounter = openCounter + 1;
+        else
+            closedLateral(closedCounter) = VariableList{j}.data(i,2);
+            closedAnteriorPosterior(closedCounter) = VariableList{j}.data(i, 3);
+            closedCounter = closedCounter + 1;
+        end
+    end
+ 
+    % Meðaltal fyrir opin og lokuð augu, bæði Lateral og Ant/Pos
+    % Meðaltöl reiknuð með absolute gildum.
+    meanAbsOpenLateral(i) = mean(abs(openLateral));
+    meanAbsOpenAnteriorPosterior(i) = mean(abs(openAnteriorPosterior));
+    meanAbsClosedLateral(i) = mean(abs(closedLateral));
+    meanAbsClosedAnteriorPosterior(i) = mean(abs(closedAnteriorPosterior));
+end
+
+% útskýring á ttest2, af netinu:
+% returns a test decision for the null hypothesis that the data in vectors x 
+% and y comes from independent random samples from normal distributions with 
+% equal means and equal but unknown variances, using the two-sample t-test. 
+% The alternative hypothesis is that the data in x and y comes from populations 
+% with unequal means. The result h is 1 if the test rejects the null hypothesis 
+%at the 5% significance level, and 0 otherwise.
+ttest2(meanAbsOpenLateral,meanAbsClosedLateral)                       % Segir að það sé munur á milli
+ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)   % Segir að það sé munur á milli
+                                                                % Öll test segja að það sé munur á milli þess að hafa augun opin og lokuð
+figure;
+hold on
+subplot(1,2,1);
+plot(meanAbsOpenLateral,meanAbsOpenAnteriorPosterior,'r.');
+subplot(1,2,2);
+plot(meanAbsClosedLateral,meanAbsClosedAnteriorPosterior,'b.');
+hold off
+
+figure;
+subplot(2,2,1);
+hist(meanAbsOpenLateral)
+subplot(2,2,2);
+hist(meanAbsClosedLateral)
+subplot(2,2,3);
+hist(meanAbsOpenAnteriorPosterior)
+subplot(2,2,4);
+hist(meanAbsClosedAnteriorPosterior)
 
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
@@ -416,7 +408,7 @@ fprintf('AÐFERÐ 2: \n')
 
 for j = 1 : length(VariableList)
        
-    % Tölur næsta núlli reiknaðar
+    % Tölur næstar núlli reiknaðar
     %  hypot er sama og "sqrt((x-0).^2 + (y-0).^2)"
     result(j) = sum(hypot((VariableList{j}.data(:,2)),(VariableList{j}.data(:,3))));
     result(j) = (result(j) / 16500);
@@ -428,6 +420,7 @@ end
 % Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
 % þar af leiðandi best í prófinu
 smallest = result(1);
+name = result(1);
 for j = 2 : length(result)
     if result(j) < smallest
         smallest = result(j);
@@ -438,3 +431,7 @@ end
 winner = name(find(result == smallest));
 fprintf('Sigurvegari = %s \n', winner)
 % Báðar aðferðirnar benda á "SUB24_closed" sem besti einstaklingurinn.
+
+
+
+
