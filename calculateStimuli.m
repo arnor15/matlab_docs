@@ -20,7 +20,6 @@ stimulusLength = length(stimulusNm);    % Fjöldi mælingar
 
 stimuliCounter = 0;             % Upphafspunktur fyrir fjölda stimulusa
 stimuliTotalTimes = [];         % Samlagning á fjölda tímabila sem stimulus stóð yfir
-stimuliTotalTimesCounter = 1;
 i = 1;
 
 while i ~= stimulusLength
@@ -47,8 +46,7 @@ while i ~= stimulusLength
     end
     
     % Telur sekúnturnar sem stimulus var í 59 og geymir í "stimuliTotalTimes"
-    stimuliTotalTimes(stimuliTotalTimesCounter) = stimuliCurrentTime(end) - stimuliCurrentTime(1);
-    stimuliTotalTimesCounter = stimuliTotalTimesCounter + 1;
+    stimuliTotalTimes(stimuliCounter) = stimuliCurrentTime(end) - stimuliCurrentTime(1);
 end
 
 StimuliMeanTime = sum(stimuliTotalTimes) / stimuliCounter;
