@@ -42,26 +42,7 @@ end
 %% 2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma?
 fprintf('2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma? \n') 
 
-% Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
-% Ef gildið er 20, er því breytt í 0 og það þýðir að örvun sé af.
-% Annars skilar fallið villu í því staki sem villan fundin.
-stimuli = xlsread('Stimuli.xlsx');
-yStimuli = stimuli(:, 2);
-for i = 1 : length(yStimuli)
-    if yStimuli(i)==20
-    yStimuli(i)=0;
-    elseif yStimuli(i)==59
-    yStimuli(i)=1;
-    end
-   
-end 
-%fjöldi staka þar sem titringurinn er á er jafnt summu yStimuli
-  stok=sum(yStimuli);
-  %ef stöfnunartíðnin er 50 Hz er eru 50 stök mæld á sekúndu
-  %þannig að örvunin er á í stok/50 sekúndur
-  timi=stok/50;
-  timi_alls=length(yStimuli)/50;
-  fprintf('Ein mæling tekur alls %.0f sekúndur, þar af er titringur á í %.0f sekúndur',timi_alls,timi)
+% ?
 
 %% 3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window
 fprintf('3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window \n')
@@ -146,7 +127,6 @@ for i = 1 : length(VariableList)
     plot(xAs(9001:12750),yAs(9001:12750),'b');
     plot(xAs(12751:16500),yAs(12751:16500),'k');
     axis([0 350 -40 40]);
-    set(gca, 'yticklabel', []);
     hold off;
     
     % --- plot 3 ---
@@ -164,7 +144,6 @@ for i = 1 : length(VariableList)
     plot(xAs(9001:12750),yAs(9001:12750),'b');
     plot(xAs(12751:16500),yAs(12751:16500),'k');
     axis([0 350 -40 40]);
-    set(gca, 'yticklabel', []);
     hold off;
     
     % Bý til filepath til að vista figure
@@ -439,6 +418,7 @@ end
 % Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
 % þar af leiðandi best í prófinu
 smallest = result(1);
+name = result(1);
 for j = 2 : length(result)
     if result(j) < smallest
         smallest = result(j);
