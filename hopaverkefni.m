@@ -24,7 +24,7 @@ for i = 1 : length(dirData)
     variableName = variableName{1};
     variableName = convertCharsToStrings(variableName);
     
-    fprintf('Saeki gogn ur %s' \n, variableName)
+    fprintf('Saeki gogn ur %s \n', variableName)
     
     % Athuga hvort skrá sé með opin eða lokuð augu
     if isempty(strfind(variableName,'open')) == 0
