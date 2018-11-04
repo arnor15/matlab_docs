@@ -320,17 +320,21 @@ legend('Q1-Q4 Posterior/Anterior');
 fprintf('7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. \n')
 
 
+openLateral=zeros(16500,33);
+openAnteriorPosterior=zeros(16500,33);
+closedLateral=zeros(16500,33);
+openAnteriorPosterior=zeros(16500,33);
 for i = 1 : 16500
-openCounter = 1;
-closedCounter = 1;
+    openCounter = 1;
+    closedCounter = 1;
     for j = 1 : length(VariableList)
         if VariableList{j}.type == 'open'
-            openLateral(openCounter) = VariableList{j}.data(i,2);
-            openAnteriorPosterior(openCounter) = VariableList{j}.data(i, 3);
+            openLateral(:,openCounter) = VariableList{j}.data(:,2);
+            openAnteriorPosterior(:,openCounter) = VariableList{j}.data(:,3);
             openCounter = openCounter + 1;
         else
-            closedLateral(closedCounter) = VariableList{j}.data(i,2);
-            closedAnteriorPosterior(closedCounter) = VariableList{j}.data(i, 3);
+            closedLateral(:,closedCounter) = VariableList{j}.data(:,2);
+            closedAnteriorPosterior(:,closedCounter) = VariableList{j}.data(j, 3);
             closedCounter = closedCounter + 1;
         end
     end
