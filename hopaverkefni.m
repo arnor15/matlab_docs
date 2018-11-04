@@ -323,7 +323,8 @@ fprintf('7. Gerið greiningu á muninum milli þess að hafa opin augu vs að ha
 openLateral=zeros(16500,33);
 openAnteriorPosterior=zeros(16500,33);
 closedLateral=zeros(16500,33);
-openAnteriorPosterior=zeros(16500,33);
+closedAnteriorPosterior=zeros(16500,33);
+
 for i = 1 : 16500
     openCounter = 1;
     closedCounter = 1;
@@ -334,18 +335,33 @@ for i = 1 : 16500
             openCounter = openCounter + 1;
         else
             closedLateral(:,closedCounter) = VariableList{j}.data(:,2);
-            closedAnteriorPosterior(:,closedCounter) = VariableList{j}.data(j, 3);
+            closedAnteriorPosterior(:,closedCounter) = VariableList{j}.data(:, 3);
             closedCounter = closedCounter + 1;
         end
     end
- 
-    % Meðaltal fyrir opin og lokuð augu, bæði Lateral og Ant/Pos
-    % Meðaltöl reiknuð með absolute gildum.
-    meanAbsOpenLateral(i) = mean(abs(openLateral));
-    meanAbsOpenAnteriorPosterior(i) = mean(abs(openAnteriorPosterior));
-    meanAbsClosedLateral(i) = mean(abs(closedLateral));
-    meanAbsClosedAnteriorPosterior(i) = mean(abs(closedAnteriorPosterior));
 end
+
+% Meðaltal fyrir opin og lokuð augu, bæði Lateral og Ant/Pos
+% Meðaltöl reiknuð með absolute gildum.
+meanAbsOpenLateral = mean(abs(openLateral));
+meanAbsOpenAnteriorPosterior = mean(abs(openAnteriorPosterior));
+meanAbsClosedLateral = mean(abs(closedLateral));
+meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
+
+
+figure;
+subplot(2,2,1);
+boxplot(meanAbsOpenLateral)
+title('meanAbsOpenLateral');
+subplot(2,2,2);
+boxplot(meanAbsClosedLateral)
+title('meanAbsClosedLateral');
+subplot(2,2,3);
+boxplot(meanAbsOpenAnteriorPosterior)
+title('meanAbsOpenAnteriorPosterior');
+subplot(2,2,4);
+boxplot(meanAbsClosedAnteriorPosterior)
+title('meanAbsClosedAnteriorPosterior');
 
 % útskýring á ttest2, af netinu:
 % returns a test decision for the null hypothesis that the data in vectors x 
@@ -433,7 +449,6 @@ end
 % Sá einstaklingur sem fór samtals styst frá núllpunkti og stóð sig
 % þar af leiðandi best í prófinu
 smallest = result(1);
-name = result(1);
 for j = 2 : length(result)
     if result(j) < smallest
         smallest = result(j);
