@@ -44,7 +44,6 @@ fprintf('2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling l
 
 % Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
 % Ef gildið er 20, er því breytt í 0 og það þýðir að örvun sé af.
-% Annars skilar fallið villu í því staki sem villan fundin.
 stimuli = xlsread('Stimuli.xlsx');
 yStimuli = stimuli(:, 2);
 for i = 1 : length(yStimuli)
@@ -99,7 +98,8 @@ for i = 1 : length(VariableList)
     newFigure = figure('visible', 'off');
     
     % --- plot 1 ---
-    
+    % fyrsta grafið er örvunin sem fall af tíma
+    %teiknum með mismunandi lit fyrir QS, Q1, Q2, Q3 og Q4
     subplot(3,1,1);
     hold on
     title('Stimuli');
@@ -122,7 +122,8 @@ for i = 1 : length(VariableList)
     end
     
     % --- plot 2 ---
-    
+    %graf tvö er lateral vægið sem fall af tíma
+    %teiknum með mismunandi lit fyrir QS, Q1, Q2, Q3 og Q4
     xAs = VariableList{i}.data(:,1);
     yAs = VariableList{i}.data(:, 2);
 
@@ -140,7 +141,8 @@ for i = 1 : length(VariableList)
     hold off;
     
     % --- plot 3 ---
-    
+     %graf tvö er anterior/posterior vægið sem fall af tíma
+    %teiknum með mismunandi lit fyrir QS, Q1, Q2, Q3 og Q4
     yAs = VariableList{i}.data(:, 3);    
     
     subplot(3,1,3);
@@ -172,7 +174,7 @@ fprintf('5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt 
 % Skilgreinir plot titla
 TitleOpen = "Opin augu";
 TitleClosed = "Lokuð augu";
-
+% Þessi lykkja fer í gegnum allar SUB skrárnar og teiknar upp sveigjuna í plönunum
 for i = 1 : length(VariableList)
     fprintf('Bý til sveigju mynd nr %d ...\n', i) 
     
@@ -411,7 +413,7 @@ for j = 2 : length(result)
     end
 end
 
-% Finnur einstaklinginn sem er stysst frá núlli
+% Finnur einstaklinginn sem er styst frá núlli
 winner = name(find(result == smallest));
 fprintf('Sigurvegari = %s \n', winner)
 
@@ -439,7 +441,7 @@ for j = 2 : length(result)
     end
 end
 
-% Finnur einstaklinginn sem er stysst frá núlli
+% Finnur einstaklinginn sem er styst frá núlli
 winner = name(find(result == smallest));
 fprintf('Sigurvegari = %s \n', winner)
-% Báðar aðferðirnar benda á "SUB24_closed" sem besti einstaklingurinn.
+% Báðar aðferðirnar benda á að "SUB24_closed" stóð sig best.
