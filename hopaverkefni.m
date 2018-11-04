@@ -318,13 +318,13 @@ legend('Q1-Q4 Posterior/Anterior');
 
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu.
 fprintf('7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. \n')
-
-
+%Búum til fjögur tóm fylki fyrir anterior/posterior vægið fyrir bæði opin
+%og lokuð augu
 openLateral=zeros(16500,33);
 openAnteriorPosterior=zeros(16500,33);
 closedLateral=zeros(16500,33);
 closedAnteriorPosterior=zeros(16500,33);
-
+%Gerum for-lykkju sem flokkar gögnin úr hverri SUB skrá í rétt fylki
 for i = 1 : 16500
     openCounter = 1;
     closedCounter = 1;
@@ -340,15 +340,28 @@ for i = 1 : 16500
         end
     end
 end
-
-% Meðaltal fyrir opin og lokuð augu, bæði Lateral og Ant/Pos
-% Meðaltöl reiknuð með absolute gildum.
-meanAbsOpenLateral = mean(abs(openLateral));
-meanAbsOpenAnteriorPosterior = mean(abs(openAnteriorPosterior));
-meanAbsClosedLateral = mean(abs(closedLateral));
-meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
-
-
+    %Finnum meðaltalið af hverju fylki
+    meanAbsOpenLateral = mean(abs(openLateral));
+    meanAbsOpenAnteriorPosterior = mean(abs(openAnteriorPosterior));
+    meanAbsClosedLateral = mean(abs(closedLateral));
+    meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
+%Athugum hvort það sé munur á gögnunum skv ttestinu í Matlab
+L=ttest2(meanAbsOpenLateral,meanAbsClosedLateral)                       
+A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
+%prentum út niðurstöðuna úr ttestinu
+ if    L==0
+     fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á lateral væginu með opin augu eða lokuð\n')
+ else
+     fprintf('Niðurstaðan úr ttestinu er að það sé munur á lateral væginu með opin augu eða lokuð\n')
+ end
+ 
+     
+ if A==0
+         fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á anterior/posterior væginu með opin augu eða lokuð\n')
+ else
+         fprintf('Niðurstaðan úr ttestinu er að það sé munur á lateral væginu með opin augu eða lokuð\n')
+ end      
+     %teiknum upp meðaltölin úr hverju fylki til að sjá muninn
 figure;
 subplot(2,2,1);
 boxplot(meanAbsOpenLateral)
@@ -362,35 +375,6 @@ title('meanAbsOpenAnteriorPosterior');
 subplot(2,2,4);
 boxplot(meanAbsClosedAnteriorPosterior)
 title('meanAbsClosedAnteriorPosterior');
-
-% útskýring á ttest2, af netinu:
-% returns a test decision for the null hypothesis that the data in vectors x 
-% and y comes from independent random samples from normal distributions with 
-% equal means and equal but unknown variances, using the two-sample t-test. 
-% The alternative hypothesis is that the data in x and y comes from populations 
-% with unequal means. The result h is 1 if the test rejects the null hypothesis 
-%at the 5% significance level, and 0 otherwise.
-ttest2(meanAbsOpenLateral,meanAbsClosedLateral)                       % Segir að það sé munur á milli
-ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)   % Segir að það sé munur á milli
-                                                                % Öll test segja að það sé munur á milli þess að hafa augun opin og lokuð
-figure;
-hold on
-subplot(1,2,1);
-plot(meanAbsOpenLateral,meanAbsOpenAnteriorPosterior,'r.');
-subplot(1,2,2);
-plot(meanAbsClosedLateral,meanAbsClosedAnteriorPosterior,'b.');
-hold off
-
-figure;
-subplot(2,2,1);
-hist(meanAbsOpenLateral)
-subplot(2,2,2);
-hist(meanAbsClosedLateral)
-subplot(2,2,3);
-hist(meanAbsOpenAnteriorPosterior)
-subplot(2,2,4);
-hist(meanAbsClosedAnteriorPosterior)
-
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
 fprintf('8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður \n')
