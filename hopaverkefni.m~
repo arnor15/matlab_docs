@@ -319,10 +319,9 @@ legend('Q1-Q4 Posterior/Anterior');
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu.
 fprintf('7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. \n')
 
-
 for i = 1 : 16500
-openCounter = 1;
-closedCounter = 1;
+    openCounter = 1;
+    closedCounter = 1;
     for j = 1 : length(VariableList)
         if VariableList{j}.type == 'open'
             openLateral(openCounter) = VariableList{j}.data(i,2);
@@ -369,7 +368,7 @@ hist(meanAbsClosedLateral)
 subplot(2,2,3);
 hist(meanAbsOpenAnteriorPosterior)
 subplot(2,2,4);
-hist(meanAbsClosedAnteriorPosterior)
+hist(meanClosedAnteriorPosterior)
 
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
@@ -440,3 +439,7 @@ end
 winner = name(find(result == smallest));
 fprintf('Sigurvegari = %s \n', winner)
 % Báðar aðferðirnar benda á "SUB24_closed" sem besti einstaklingurinn.
+
+
+
+
