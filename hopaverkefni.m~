@@ -257,8 +257,8 @@ PosQ2 = meanAnteriorPosterior(5251:9000);
 PosQ3 = meanAnteriorPosterior(9001:12750);
 PosQ4 = meanAnteriorPosterior(12751:16500);
 QLateralAll =[PosQ1; PosQ2; PosQ3; PosQ4];
-rotatedQAll = rot90(QLateralAll)
-timabil = {'Q1' 'Q2' 'Q3' 'Q4'}
+rotatedQAll = rot90(QLateralAll);
+timabil = {'Q1' 'Q2' 'Q3' 'Q4'};
 p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
                                     % sem þýðir að það sé munur á milli tímabila.
                                     % Því þarf að halda áfram að svara
