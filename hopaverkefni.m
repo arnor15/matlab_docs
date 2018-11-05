@@ -3,12 +3,12 @@ close all
 clear all
 clc
 
-%% 1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn 
-fprintf('1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn \n') 
-
 % ATH til að birta engar myndir á skjá þarf að breyta eftirfarandi breytu í
 % off
 synileiki='on'
+
+%% 1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn 
+fprintf('1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn \n') 
 
 % Sæki stimuli skránna sem verður notuð í öllum plotum
 % Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
