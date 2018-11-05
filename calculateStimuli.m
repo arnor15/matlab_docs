@@ -51,7 +51,7 @@ end
 
 StimuliMeanTime = sum(stimuliTotalTimes) / stimuliCounter;
 
-fprintf('Heildarfjöldi stimulu er %d\n', stimuliCounter);
+fprintf('Heildarfjöldi stimula er %d\n', stimuliCounter);
 fprintf('Meðaltími hvers stimulus er %.2f sekúntur\n', StimuliMeanTime); 
 
 end
