@@ -274,6 +274,7 @@ p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
 
 %% 7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu.
 fprintf('7. Gerið greiningu á muninum milli þess að hafa opin augu vs að hafa lokuð augu. \n')
+fprintf('Tekur smá tíma að reikna út... \n')
 %Búum til fjögur tóm fylki fyrir anterior/posterior vægið fyrir bæði opin
 %og lokuð augu
 openLateral=zeros(16500,33);
@@ -304,8 +305,8 @@ meanAbsClosedLateral = mean(abs(closedLateral));
 meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
 
 %Athugum hvort það sé munur á gögnunum skv ttestinu í Matlab
-L=ttest2(meanAbsOpenLateral,meanAbsClosedLateral)                       
-A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
+L=ttest2(meanAbsOpenLateral,meanAbsClosedLateral);  
+A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior);
 
 %prentum út niðurstöðuna úr ttestinu
  if    L==0
