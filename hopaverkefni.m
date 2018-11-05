@@ -253,7 +253,7 @@ timabil = {'Q1' 'Q2' 'Q3' 'Q4'};
 p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
                                     % sem þýðir að það sé munur á milli tímabila.
                                     % Því þarf að halda áfram að svara
-                                    % spurningu um hvort dreifnin minnki á
+                                    % spurningu útfrá teikninum um hvort dreifnin minnki á
                                     % milli Q1 og að Q4.
                                     
 % Er munur á milli Anterior/Posterior tímabila?
@@ -267,7 +267,7 @@ timabil = {'Q1' 'Q2' 'Q3' 'Q4'};
 p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
                                     % sem þýðir að það sé munur á milli tímabila.
                                     % Því þarf að halda áfram að svara
-                                    % spurningu um hvort dreifnin minnki á
+                                    % spurningu útfrá teikningum um hvort dreifnin minnki á
                                     % milli Q1 og að Q4.
     
 % Hvað sést útfrá á teikningum?
@@ -296,14 +296,17 @@ for i = 1 : 16500
         end
     end
 end
-    %Finnum meðaltalið af hverju fylki
-    meanAbsOpenLateral = mean(abs(openLateral));
-    meanAbsOpenAnteriorPosterior = mean(abs(openAnteriorPosterior));
-    meanAbsClosedLateral = mean(abs(closedLateral));
-    meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
+
+%Finnum meðaltalið af hverju fylki
+meanAbsOpenLateral = mean(abs(openLateral));
+meanAbsOpenAnteriorPosterior = mean(abs(openAnteriorPosterior));
+meanAbsClosedLateral = mean(abs(closedLateral));
+meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
+
 %Athugum hvort það sé munur á gögnunum skv ttestinu í Matlab
 L=ttest2(meanAbsOpenLateral,meanAbsClosedLateral)                       
 A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
+
 %prentum út niðurstöðuna úr ttestinu
  if    L==0
      fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á lateral væginu með opin augu eða lokuð\n')
@@ -316,8 +319,9 @@ A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
          fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á anterior/posterior væginu með opin augu eða lokuð\n')
  else
          fprintf('Niðurstaðan úr ttestinu er að það sé munur á lateral væginu með opin augu eða lokuð\n')
- end      
-     %teiknum upp meðaltölin úr hverju fylki til að sjá muninn
+ end
+ 
+ %teiknum upp meðaltölin úr hverju fylki til að sjá muninn
 figure;
 subplot(2,2,1);
 boxplot(meanAbsOpenLateral)
