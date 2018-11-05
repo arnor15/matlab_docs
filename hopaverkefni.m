@@ -367,16 +367,20 @@ A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
 figure;
 subplot(2,2,1);
 boxplot(meanAbsOpenLateral)
-title('meanAbsOpenLateral');
+title('Meðaltöl úr medial/Lateral með opin augu');
+set(gca, 'xticklabel', []);
 subplot(2,2,2);
 boxplot(meanAbsClosedLateral)
-title('meanAbsClosedLateral');
+title('Meðaltöl úr medial/Lateral með lokuð augu');
+set(gca, 'xticklabel', []);
 subplot(2,2,3);
 boxplot(meanAbsOpenAnteriorPosterior)
-title('meanAbsOpenAnteriorPosterior');
+title('Meðaltöl úr anterior/posterior með opin augu');
+set(gca, 'xticklabel', []);
 subplot(2,2,4);
 boxplot(meanAbsClosedAnteriorPosterior)
-title('meanAbsClosedAnteriorPosterior');
+title('Meðaltöl úr anterior/posterior með lokuð augu');
+set(gca, 'xticklabel', []);
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
 fprintf('8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður \n')
