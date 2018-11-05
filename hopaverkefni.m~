@@ -1,20 +1,35 @@
+
 close all
 clear all
 clc
 
+% ATH til að birta engar myndir á skjá þarf að breyta eftirfarandi breytu í
+% off
+synileiki='on'
+
 %% 1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn 
-fprintf('1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn \n') 
+fprintf('1. Látið Matlab finna sjálfvirkt allarfire gagnarkskrárnar og lesa þær sjálfvirkt inn \n') 
 
 % Sæki stimuli skránna sem verður notuð í öllum plotum
+% Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
+% Ef gildið er 20, er því breytt í 0 og það þýðir að örvun sé af.
 stimuli = xlsread('Stimuli.xlsx');
+yStimuli = stimuli(:,2);
+xStimuli = stimuli(:,1);
+
+for i = 1 : length(yStimuli)
+    if yStimuli(i)==20
+    yStimuli(i)=0;
+    elseif yStimuli(i)==59
+    yStimuli(i)=1;
+    end
+   
+end
 
 % Sæki nöfnin á öllum SUB skrám
 dirData = dir('SUB*.xlsx');
 
-% Bara finna open / closed
-% dirData = dir('SUB*open*.xlsx');
-% dirData.name
-
+% Set hver
 for i = 1 : length(dirData)
     % Sæki nafn á skrá
     fileName = (dirData(i).name);
@@ -42,18 +57,7 @@ end
 %% 2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma?
 fprintf('2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma? \n') 
 
-% Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
-% Ef gildið er 20, er því breytt í 0 og það þýðir að örvun sé af.
-stimuli = xlsread('Stimuli.xlsx');
-yStimuli = stimuli(:, 2);
-for i = 1 : length(yStimuli)
-    if yStimuli(i)==20
-    yStimuli(i)=0;
-    elseif yStimuli(i)==59
-    yStimuli(i)=1;
-    end
-   
-end
+
 
 %fjöldi staka þar sem titringurinn er á er jafnt summu yStimuli
 stok=sum(yStimuli);
@@ -82,9 +86,6 @@ else
     mkdir Myndir
 end
 
-xStimuli = stimuli(:,1);
-yStimuli = stimuli(:, 2);
-
 % Skilgreinir plot titla
 TitleOpen = ["Opin augu: Medial/Lateral vægi", "Opin augu: Anterior/Posterior vægi"];
 TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Posterior vægi"];
@@ -93,22 +94,22 @@ TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Poste
 for i = 1 : length(VariableList)
     
     fprintf('Bý til mynd nr %d ...\n', i)   
-    % Býr til nýja mynd, sem birtist ekki á skjánum
+    % Býr til nýja mynd
     % því við ætlum bara að vista hana.
-    newFigure = figure('visible', 'off');
+    newFigure = figure('visible',synileiki);
     
     % --- plot 1 ---
     % fyrsta grafið er örvunin sem fall af tíma
     %teiknum með mismunandi lit fyrir QS, Q1, Q2, Q3 og Q4
-    subplot(3,1,1);
+    subplot(3,1,1)
     hold on
     title('Stimuli');
     xlabel('Time[s]');
-    plot(xStimuli(1:1501),yStimuli(1:1501),'m');
-    plot(xStimuli(1501:5250),yStimuli(1501:5250),'r');
-    plot(xStimuli(5251:9000),yStimuli(5251:9000),'g');
-    plot(xStimuli(9001:12750),yStimuli(9001:12750),'b');
-    plot(xStimuli(12751:16500),yStimuli(12751:16500),'k');
+    plot(xStimuli(1:1501),yStimuli(1:1501),'m')
+    plot(xStimuli(1501:5250),yStimuli(1501:5250),'r')
+    plot(xStimuli(5251:9000),yStimuli(5251:9000),'g')
+    plot(xStimuli(9001:12750),yStimuli(9001:12750),'b')
+    plot(xStimuli(12751:16500),yStimuli(12751:16500),'k')
     axis([0 350 -1 2]);
     set(gca, 'yticklabel', []);
     hold off;
@@ -127,16 +128,16 @@ for i = 1 : length(VariableList)
     xAs = VariableList{i}.data(:,1);
     yAs = VariableList{i}.data(:, 2);
 
-    subplot(3,1,2);
+    subplot(3,1,2)
     hold on;
     title(Title(1));
     xlabel('Time[s]');
     ylabel('Torque [Nm]');
-    plot(xAs(1:1501),yAs(1:1501),'m');
-    plot(xAs(1501:5250),yAs(1501:5250),'r');
-    plot(xAs(5251:9000),yAs(5251:9000),'g');
-    plot(xAs(9001:12750),yAs(9001:12750),'b');
-    plot(xAs(12751:16500),yAs(12751:16500),'k');
+    plot(xAs(1:1501),yAs(1:1501),'m')
+    plot(xAs(1501:5250),yAs(1501:5250),'r')
+    plot(xAs(5251:9000),yAs(5251:9000),'g')
+    plot(xAs(9001:12750),yAs(9001:12750),'b')
+    plot(xAs(12751:16500),yAs(12751:16500),'k')
     axis([0 350 -40 40]);
     hold off;
     
@@ -145,16 +146,16 @@ for i = 1 : length(VariableList)
     %teiknum með mismunandi lit fyrir QS, Q1, Q2, Q3 og Q4
     yAs = VariableList{i}.data(:, 3);    
     
-    subplot(3,1,3);
+    subplot(3,1,3)
     hold on;
     title(Title(2));
     xlabel('Time[s]');
     ylabel('Torque [Nm]');
-    plot(xAs(1:1501),yAs(1:1501),'m');
-    plot(xAs(1501:5250),yAs(1501:5250),'r');
-    plot(xAs(5251:9000),yAs(5251:9000),'g');
-    plot(xAs(9001:12750),yAs(9001:12750),'b');
-    plot(xAs(12751:16500),yAs(12751:16500),'k');
+    plot(xAs(1:1501),yAs(1:1501),'m')
+    plot(xAs(1501:5250),yAs(1501:5250),'r')
+    plot(xAs(5251:9000),yAs(5251:9000),'g')
+    plot(xAs(9001:12750),yAs(9001:12750),'b')
+    plot(xAs(12751:16500),yAs(12751:16500),'k')
     axis([0 350 -40 40]);
     hold off;
     
@@ -165,7 +166,7 @@ for i = 1 : length(VariableList)
     
     % Vistar mynd undir "Myndir"
     saveas(newFigure, filePath);
-    close(newFigure);
+   
 end
 
 %% 5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt er á mynd 3 
@@ -189,7 +190,7 @@ for i = 1 : length(VariableList)
         Title = TitleClosed;
     end
     
-    newFigure = figure('visible', 'off');
+    newFigure = figure('visible', synileiki);
     hold on
     title(Title);
     xlabel('Anterior/posterior [Nm]');
@@ -206,8 +207,7 @@ for i = 1 : length(VariableList)
     saveas(newFigure, filePath);
     
     hold off;
-    close(newFigure);
-
+    
 end
 
 
@@ -245,12 +245,12 @@ LatQ2 = meanLateral(5251:9000);
 LatQ3 = meanLateral(9001:12750);
 LatQ4 = meanLateral(12751:16500);
 QLateralAll =[LatQ1; LatQ2; LatQ3; LatQ4];
-rotatedQAll = rot90(QLateralAll)
-timabil = {'Q1' 'Q2' 'Q3' 'Q4'}
+rotatedQAll = rot90(QLateralAll);
+timabil = {'Q1' 'Q2' 'Q3' 'Q4'};
 p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
                                     % sem þýðir að það sé munur á milli tímabila.
                                     % Því þarf að halda áfram að svara
-                                    % spurningu um hvort dreifnin minnki á
+                                    % spurningu útfrá teikninum um hvort dreifnin minnki á
                                     % milli Q1 og að Q4.
                                     
 % Er munur á milli Anterior/Posterior tímabila?
@@ -264,57 +264,8 @@ timabil = {'Q1' 'Q2' 'Q3' 'Q4'};
 p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
                                     % sem þýðir að það sé munur á milli tímabila.
                                     % Því þarf að halda áfram að svara
-                                    % spurningu um hvort dreifnin minnki á
+                                    % spurningu útfrá teikningum um hvort dreifnin minnki á
                                     % milli Q1 og að Q4.
-
-% Næst er ábyggilega best að bera saman standard deviation (std) á
-% milli tímabilana til að skoða hversu dreifð gögnin eru.
-
-% Finna meðaldreifni á fyrir alla einstaklinga á Q1 - Q4
-meanLatQ1 = mean(meanLateral(1501:5250));
-meanLatQ2 = mean(meanLateral(5251:9000));
-meanLatQ3 = mean(meanLateral(9001:12750));
-meanLatQ4 = mean(meanLateral(12751:16500));
-meanLatAll = [meanLatQ1, meanLatQ2, meanLatQ3, meanLatQ4];
-meanPosQ1 = mean(meanAnteriorPosterior(1501:5250));
-meanPosQ2 = mean(meanAnteriorPosterior(5251:9000));
-meanPosQ3 = mean(meanAnteriorPosterior(9001:12750));
-meanPosQ4 = mean(meanAnteriorPosterior(12751:16500));
-meanPosAll = [meanPosQ1, meanPosQ2, meanPosQ3, meanPosQ4];
-
-% Finna staðalfrávik á fyrir alla einstaklinga á Q1 - Q4
-stdLatQ1 = std(meanLateral(1501:5250));
-stdLatQ2 = std(meanLateral(5251:9000));
-stdLatQ3 = std(meanLateral(9001:12750));
-stdLatQ4 = std(meanLateral(12751:16500));
-stdLatAll = [stdLatQ1, stdLatQ2, stdLatQ3, stdLatQ4];
-stdPosQ1 = std(meanAnteriorPosterior(1501:5250));
-stdPosQ2 = std(meanAnteriorPosterior(5251:9000));
-stdPosQ3 = std(meanAnteriorPosterior(9001:12750));
-stdPosQ4 = std(meanAnteriorPosterior(12751:16500));
-stdPosAll = [stdPosQ1, stdPosQ2, stdPosQ3, stdPosQ4];
-
-% Teikna upp errorbar
-figure
-subplot(1,2,1)
-hold on
-ax = axis;
-errorbar(meanLatAll,stdLatAll, '.', 'Vertical', 'MarkerFaceColor','red');
-axis([0 5 2 4])
-title('Lateral-Hreyfing');
-xlabel ('Tímabil Q1-Q4');
-ylabel ('Staðalfrávik');
-legend('Q1 - Q4 Lateral');
-
-% Teikna upp errorbar
-subplot(1,2,2)
-ax = axis;
-errorbar(meanPosAll,stdPosAll, '.', 'Vertical', 'MarkerFaceColor','blue');
-axis([0 5 5 11])
-title('Anterior/Posterior - Hreyfing');
-xlabel ('Tímabil Q1-Q4');
-ylabel ('Staðalfrávik');
-legend('Q1-Q4 Posterior/Anterior');
     
 % Hvað sést útfrá á teikningum?
 
@@ -342,14 +293,17 @@ for i = 1 : 16500
         end
     end
 end
-    %Finnum meðaltalið af hverju fylki
-    meanAbsOpenLateral = mean(abs(openLateral));
-    meanAbsOpenAnteriorPosterior = mean(abs(openAnteriorPosterior));
-    meanAbsClosedLateral = mean(abs(closedLateral));
-    meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
+
+%Finnum meðaltalið af hverju fylki
+meanAbsOpenLateral = mean(abs(openLateral));
+meanAbsOpenAnteriorPosterior = mean(abs(openAnteriorPosterior));
+meanAbsClosedLateral = mean(abs(closedLateral));
+meanAbsClosedAnteriorPosterior = mean(abs(closedAnteriorPosterior));
+
 %Athugum hvort það sé munur á gögnunum skv ttestinu í Matlab
 L=ttest2(meanAbsOpenLateral,meanAbsClosedLateral)                       
 A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
+
 %prentum út niðurstöðuna úr ttestinu
  if    L==0
      fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á lateral væginu með opin augu eða lokuð\n')
@@ -362,26 +316,26 @@ A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
          fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á anterior/posterior væginu með opin augu eða lokuð\n')
  else
          fprintf('Niðurstaðan úr ttestinu er að það sé munur á lateral væginu með opin augu eða lokuð\n')
- end      
-     %teiknum upp meðaltölin úr hverju fylki til að sjá muninn
+ end
+ 
+ %teiknum upp meðaltölin úr hverju fylki til að sjá muninn
 figure;
 subplot(2,2,1);
 boxplot(meanAbsOpenLateral)
-title({'Meðaltöl tölugilda Med/Lat';'Opin augu'});
+title({'Meðaltal tölugilda med/lat';' opin augu'});
 set(gca, 'xticklabel', []);
 subplot(2,2,2);
 boxplot(meanAbsClosedLateral)
-title({'Meðaltöl tölugilda Med/Lat';'Lokuð augu'});
+title({'Meðaltal tölugilda med/lat';'lokuð augu'});
 set(gca, 'xticklabel', []);
 subplot(2,2,3);
 boxplot(meanAbsOpenAnteriorPosterior)
-title({'Meðaltöl úr anterior/posterior';' með opin augu'});
+title({'Meðaltal tölugilda ant/pos';'opin augu'});
 set(gca, 'xticklabel', []);
 subplot(2,2,4);
 boxplot(meanAbsClosedAnteriorPosterior)
-title({'Meðaltöl úr anterior/posterior';' með lokuð augu'});
+title({'Meðaltal tölugilda ant/pos';'lokuð augu'});
 set(gca, 'xticklabel', []);
-
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
 fprintf('8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður \n')
 
@@ -444,8 +398,8 @@ for j = 2 : length(result)
         smallest = result(j);
     end
 end
-
 % Finnur einstaklinginn sem er styst frá núlli
 winner = name(find(result == smallest));
 fprintf('Sigurvegari = %s \n', winner)
 % Báðar aðferðirnar benda á að "SUB24_closed" stóð sig best.
+
