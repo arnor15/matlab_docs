@@ -361,25 +361,25 @@ A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
  if A==0
          fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á anterior/posterior væginu með opin augu eða lokuð\n')
  else
-         fprintf('Niðurstaðan úr ttestinu er að það sé munur á lateral væginu með opin augu eða lokuð\n')
+         fprintf('Niðurstaðan úr ttestinu er að það sé munur á anterior/posterior væginu með opin augu eða lokuð\n')
  end      
      %teiknum upp meðaltölin úr hverju fylki til að sjá muninn
 figure;
 subplot(2,2,1);
 boxplot(meanAbsOpenLateral)
-title({'Meðaltöl úr medial/Lateral';' með opin augu'});
+title({'Meðaltal tölugilda med/lat';' opin augu'});
 set(gca, 'xticklabel', []);
 subplot(2,2,2);
 boxplot(meanAbsClosedLateral)
-title({'Meðaltöl úr medial/Lateral';' með lokuð augu'});
+title({'Meðaltal tölugilda med/lat';'lokuð augu'});
 set(gca, 'xticklabel', []);
 subplot(2,2,3);
 boxplot(meanAbsOpenAnteriorPosterior)
-title({'Meðaltöl úr anterior/posterior';' með opin augu'});
+title({'Meðaltal tölugilda ant/pos';'opin augu'});
 set(gca, 'xticklabel', []);
 subplot(2,2,4);
 boxplot(meanAbsClosedAnteriorPosterior)
-title({'Meðaltöl úr anterior/posterior';' með lokuð augu'});
+title({'Meðaltal tölugilda ant/pos';'lokuð augu'});
 set(gca, 'xticklabel', []);
 
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
