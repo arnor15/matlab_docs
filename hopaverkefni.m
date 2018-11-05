@@ -269,55 +269,6 @@ p = anova1(rotatedQAll, timabil);   % P-gildið nær ekki yfir 95% öryggisbil
                                     % Því þarf að halda áfram að svara
                                     % spurningu um hvort dreifnin minnki á
                                     % milli Q1 og að Q4.
-
-% Næst er ábyggilega best að bera saman standard deviation (std) á
-% milli tímabilana til að skoða hversu dreifð gögnin eru.
-
-% Finna meðaldreifni á fyrir alla einstaklinga á Q1 - Q4
-meanLatQ1 = mean(meanLateral(1501:5250));
-meanLatQ2 = mean(meanLateral(5251:9000));
-meanLatQ3 = mean(meanLateral(9001:12750));
-meanLatQ4 = mean(meanLateral(12751:16500));
-meanLatAll = [meanLatQ1, meanLatQ2, meanLatQ3, meanLatQ4];
-meanPosQ1 = mean(meanAnteriorPosterior(1501:5250));
-meanPosQ2 = mean(meanAnteriorPosterior(5251:9000));
-meanPosQ3 = mean(meanAnteriorPosterior(9001:12750));
-meanPosQ4 = mean(meanAnteriorPosterior(12751:16500));
-meanPosAll = [meanPosQ1, meanPosQ2, meanPosQ3, meanPosQ4];
-
-% Finna staðalfrávik á fyrir alla einstaklinga á Q1 - Q4
-stdLatQ1 = std(meanLateral(1501:5250));
-stdLatQ2 = std(meanLateral(5251:9000));
-stdLatQ3 = std(meanLateral(9001:12750));
-stdLatQ4 = std(meanLateral(12751:16500));
-stdLatAll = [stdLatQ1, stdLatQ2, stdLatQ3, stdLatQ4];
-stdPosQ1 = std(meanAnteriorPosterior(1501:5250));
-stdPosQ2 = std(meanAnteriorPosterior(5251:9000));
-stdPosQ3 = std(meanAnteriorPosterior(9001:12750));
-stdPosQ4 = std(meanAnteriorPosterior(12751:16500));
-stdPosAll = [stdPosQ1, stdPosQ2, stdPosQ3, stdPosQ4];
-
-% Teikna upp errorbar
-figure
-subplot(1,2,1)
-hold on
-ax = axis;
-errorbar(meanLatAll,stdLatAll, '.', 'Vertical', 'MarkerFaceColor','red');
-axis([0 5 2 4])
-title('Lateral-Hreyfing');
-xlabel ('Tímabil Q1-Q4');
-ylabel ('Staðalfrávik');
-legend('Q1 - Q4 Lateral');
-
-% Teikna upp errorbar
-subplot(1,2,2)
-ax = axis;
-errorbar(meanPosAll,stdPosAll, '.', 'Vertical', 'MarkerFaceColor','blue');
-axis([0 5 5 11])
-title('Anterior/Posterior - Hreyfing');
-xlabel ('Tímabil Q1-Q4');
-ylabel ('Staðalfrávik');
-legend('Q1-Q4 Posterior/Anterior');
     
 % Hvað sést útfrá á teikningum?
 
