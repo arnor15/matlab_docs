@@ -96,7 +96,7 @@ TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Poste
 % Plottar upp eina mynd með 3 subplottum og vistar fyrir hvert gagnasett
 for i = 1 : length(VariableList)
     
-    fprintf('Bý til mynd nr %d ...\n', i)   
+    fprintf('Bý til og vista mynd nr %d ...\n', i)   
     % Býr til nýja mynd
     % því við ætlum bara að vista hana.
     newFigure = figure('visible',synileiki);
@@ -180,7 +180,7 @@ TitleOpen = "Opin augu";
 TitleClosed = "Lokuð augu";
 % Þessi lykkja fer í gegnum allar SUB skrárnar og teiknar upp sveigjuna í plönunum
 for i = 1 : length(VariableList)
-    fprintf('Bý til sveigju mynd nr %d ...\n', i) 
+    fprintf('Bý til og vista sveigju mynd nr %d ...\n', i) 
     
     Lateral_xAs = VariableList{i}.data(:,2);
     AnteriorPosterior_yAs = VariableList{i}.data(:, 3);

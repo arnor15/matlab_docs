@@ -29,7 +29,11 @@ end
 % Sæki nöfnin á öllum SUB skrám
 dirData = dir('SUB*.xlsx');
 
-% Set hver
+% Set hverja gagngaskrá í cellu undir:
+%   VariableList.name - Nafn á skrá
+%   VariableList.type - Týpa af skrá
+%   VariableList.data - Gögn fyrir tilteknu skrá
+
 for i = 1 : length(dirData)
     % Sæki nafn á skrá
     fileName = (dirData(i).name);
@@ -57,8 +61,6 @@ end
 %% 2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma?
 fprintf('2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma? \n') 
 
-
-
 %fjöldi staka þar sem titringurinn er á er jafnt summu yStimuli
 stok=sum(yStimuli);
 
@@ -71,6 +73,7 @@ fprintf('Ein mæling tekur alls %.0f sekúndur, þar af er titringur á í %.0f 
 %% 3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window
 fprintf('3. Skrifið fall sem telur fjölda stimulusa og reiknar út meðaltímalengd þeirra. Skrifið út niðurstöðurnar í command window \n')
 
+% Telur fjölda stimulusa
 calculateStimuli(stimuli)        
 
 
@@ -93,7 +96,7 @@ TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Poste
 % Plottar upp eina mynd með 3 subplottum og vistar fyrir hvert gagnasett
 for i = 1 : length(VariableList)
     
-    fprintf('Bý til mynd nr %d ...\n', i)   
+    fprintf('Bý til og vista mynd nr %d ...\n', i)   
     % Býr til nýja mynd
     % því við ætlum bara að vista hana.
     newFigure = figure('visible',synileiki);
