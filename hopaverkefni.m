@@ -1,3 +1,4 @@
+
 close all
 clear all
 clc
@@ -5,8 +6,25 @@ clc
 %% 1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn 
 fprintf('1. Látið Matlab finna sjálfvirkt allar gagnarkskrárnar og lesa þær sjálfvirkt inn \n') 
 
+% ATH til að birta engar myndir á skjá þarf að breyta eftirfarandi breytu í
+% off
+synileiki='on'
+
 % Sæki stimuli skránna sem verður notuð í öllum plotum
+% Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
+% Ef gildið er 20, er því breytt í 0 og það þýðir að örvun sé af.
 stimuli = xlsread('Stimuli.xlsx');
+yStimuli = stimuli(:,2);
+xStimuli = stimuli(:,1);
+
+for i = 1 : length(yStimuli)
+    if yStimuli(i)==20
+    yStimuli(i)=0;
+    elseif yStimuli(i)==59
+    yStimuli(i)=1;
+    end
+   
+end
 
 % Sæki nöfnin á öllum SUB skrám
 dirData = dir('SUB*.xlsx');
@@ -42,18 +60,7 @@ end
 %% 2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma?
 fprintf('2. Miðað við söfnunartíðni upp á 50Hz, hvað tekur ein mæling langan tíma? \n') 
 
-% Þegar gildin í inntaksbreytu eru 59, er þeim breytt í 1 og það þýðir að örvun sé á.
-% Ef gildið er 20, er því breytt í 0 og það þýðir að örvun sé af.
-stimuli = xlsread('Stimuli.xlsx');
-yStimuli = stimuli(:, 2);
-for i = 1 : length(yStimuli)
-    if yStimuli(i)==20
-    yStimuli(i)=0;
-    elseif yStimuli(i)==59
-    yStimuli(i)=1;
-    end
-   
-end
+
 
 %fjöldi staka þar sem titringurinn er á er jafnt summu yStimuli
 stok=sum(yStimuli);
@@ -82,9 +89,6 @@ else
     mkdir Myndir
 end
 
-xStimuli = stimuli(:,1);
-yStimuli = stimuli(:, 2);
-
 % Skilgreinir plot titla
 TitleOpen = ["Opin augu: Medial/Lateral vægi", "Opin augu: Anterior/Posterior vægi"];
 TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Posterior vægi"];
@@ -93,22 +97,22 @@ TitleClosed = ["Lokuð augu: Medial/Lateral vægi", "Lokuð augu: Anterior/Poste
 for i = 1 : length(VariableList)
     
     fprintf('Bý til mynd nr %d ...\n', i)   
-    % Býr til nýja mynd, sem birtist ekki á skjánum
+    % Býr til nýja mynd
     % því við ætlum bara að vista hana.
-    newFigure = figure('visible', 'off');
+    newFigure = figure('visible',synileiki);
     
     % --- plot 1 ---
     % fyrsta grafið er örvunin sem fall af tíma
     %teiknum með mismunandi lit fyrir QS, Q1, Q2, Q3 og Q4
-    subplot(3,1,1);
+    subplot(3,1,1)
     hold on
     title('Stimuli');
     xlabel('Time[s]');
-    plot(xStimuli(1:1501),yStimuli(1:1501),'m');
-    plot(xStimuli(1501:5250),yStimuli(1501:5250),'r');
-    plot(xStimuli(5251:9000),yStimuli(5251:9000),'g');
-    plot(xStimuli(9001:12750),yStimuli(9001:12750),'b');
-    plot(xStimuli(12751:16500),yStimuli(12751:16500),'k');
+    plot(xStimuli(1:1501),yStimuli(1:1501),'m')
+    plot(xStimuli(1501:5250),yStimuli(1501:5250),'r')
+    plot(xStimuli(5251:9000),yStimuli(5251:9000),'g')
+    plot(xStimuli(9001:12750),yStimuli(9001:12750),'b')
+    plot(xStimuli(12751:16500),yStimuli(12751:16500),'k')
     axis([0 350 -1 2]);
     set(gca, 'yticklabel', []);
     hold off;
@@ -127,16 +131,16 @@ for i = 1 : length(VariableList)
     xAs = VariableList{i}.data(:,1);
     yAs = VariableList{i}.data(:, 2);
 
-    subplot(3,1,2);
+    subplot(3,1,2)
     hold on;
     title(Title(1));
     xlabel('Time[s]');
     ylabel('Torque [Nm]');
-    plot(xAs(1:1501),yAs(1:1501),'m');
-    plot(xAs(1501:5250),yAs(1501:5250),'r');
-    plot(xAs(5251:9000),yAs(5251:9000),'g');
-    plot(xAs(9001:12750),yAs(9001:12750),'b');
-    plot(xAs(12751:16500),yAs(12751:16500),'k');
+    plot(xAs(1:1501),yAs(1:1501),'m')
+    plot(xAs(1501:5250),yAs(1501:5250),'r')
+    plot(xAs(5251:9000),yAs(5251:9000),'g')
+    plot(xAs(9001:12750),yAs(9001:12750),'b')
+    plot(xAs(12751:16500),yAs(12751:16500),'k')
     axis([0 350 -40 40]);
     hold off;
     
@@ -145,16 +149,16 @@ for i = 1 : length(VariableList)
     %teiknum með mismunandi lit fyrir QS, Q1, Q2, Q3 og Q4
     yAs = VariableList{i}.data(:, 3);    
     
-    subplot(3,1,3);
+    subplot(3,1,3)
     hold on;
     title(Title(2));
     xlabel('Time[s]');
     ylabel('Torque [Nm]');
-    plot(xAs(1:1501),yAs(1:1501),'m');
-    plot(xAs(1501:5250),yAs(1501:5250),'r');
-    plot(xAs(5251:9000),yAs(5251:9000),'g');
-    plot(xAs(9001:12750),yAs(9001:12750),'b');
-    plot(xAs(12751:16500),yAs(12751:16500),'k');
+    plot(xAs(1:1501),yAs(1:1501),'m')
+    plot(xAs(1501:5250),yAs(1501:5250),'r')
+    plot(xAs(5251:9000),yAs(5251:9000),'g')
+    plot(xAs(9001:12750),yAs(9001:12750),'b')
+    plot(xAs(12751:16500),yAs(12751:16500),'k')
     axis([0 350 -40 40]);
     hold off;
     
@@ -165,7 +169,7 @@ for i = 1 : length(VariableList)
     
     % Vistar mynd undir "Myndir"
     saveas(newFigure, filePath);
-    close(newFigure);
+   
 end
 
 %% 5.Teiknið upp muninn á sveigjunni í plönunum tveimur eins og sýnt er á mynd 3 
@@ -189,7 +193,7 @@ for i = 1 : length(VariableList)
         Title = TitleClosed;
     end
     
-    newFigure = figure('visible', 'off');
+    newFigure = figure('visible', synileiki);
     hold on
     title(Title);
     xlabel('Anterior/posterior [Nm]');
@@ -206,8 +210,7 @@ for i = 1 : length(VariableList)
     saveas(newFigure, filePath);
     
     hold off;
-    close(newFigure);
-
+    
 end
 
 
@@ -361,7 +364,7 @@ A=ttest2(meanAbsOpenAnteriorPosterior,meanAbsClosedAnteriorPosterior)
  if A==0
          fprintf('Niðurstaðan úr ttestinu er að það er enginn munur á anterior/posterior væginu með opin augu eða lokuð\n')
  else
-         fprintf('Niðurstaðan úr ttestinu er að það sé munur á anterior/posterior væginu með opin augu eða lokuð\n')
+         fprintf('Niðurstaðan úr ttestinu er að það sé munur á lateral væginu með opin augu eða lokuð\n')
  end      
      %teiknum upp meðaltölin úr hverju fylki til að sjá muninn
 figure;
@@ -381,7 +384,6 @@ subplot(2,2,4);
 boxplot(meanAbsClosedAnteriorPosterior)
 title({'Meðaltal tölugilda ant/pos';'lokuð augu'});
 set(gca, 'xticklabel', []);
-
 %% 8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður
 fprintf('8. Hvaða einstaklingur stóð sig best í prófinu miðað við ykkar niðurstöður \n')
 
@@ -444,8 +446,8 @@ for j = 2 : length(result)
         smallest = result(j);
     end
 end
-
 % Finnur einstaklinginn sem er styst frá núlli
 winner = name(find(result == smallest));
 fprintf('Sigurvegari = %s \n', winner)
 % Báðar aðferðirnar benda á að "SUB24_closed" stóð sig best.
+
